@@ -6,6 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    @include ('layouts.navbar')
+    @extends ('layouts.navbar')
 </body>
 </html>
