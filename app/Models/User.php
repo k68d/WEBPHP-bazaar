@@ -42,4 +42,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function advertenties()
+    {
+        return $this->hasMany(Advertentie::class, 'user_id');
+    }
 }

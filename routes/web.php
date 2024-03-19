@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdvertentieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +19,7 @@ Route::get('/', function () {
     return view('landingpage');
 })->name('landingpage');
 
-Route::get('/advertenties', function () {
-    return view('advertenties');
-})->name('advertenties');
+Route::resource('advertenties', AdvertentieController::class);
 
 Route::get('/login', function () {
     return view('/auth/login');
