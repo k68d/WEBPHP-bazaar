@@ -21,7 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -47,4 +49,26 @@ class User extends Authenticatable
     {
         return $this->hasMany(Advertentie::class, 'user_id');
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function hasRole($roles)
+    {
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if ($this->role->name == $role) {
+                    return true;
+                }
+            }
+        } else {
+            return $this->role->name == $roles;
+        }
+
+        return false;
+    }
+
+
 }

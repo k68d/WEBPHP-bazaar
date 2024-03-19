@@ -19,7 +19,10 @@ Route::get('/', function () {
     return view('landingpage');
 })->name('landingpage');
 
-Route::resource('advertenties', AdvertentieController::class);
+Route::resource('advertenties', AdvertentieController::class)
+    ->middleware('auth');
+
+Route::get('advertenties', [AdvertentieController::class, 'index'])->name('advertenties.index');
 
 Route::get('/login', function () {
     return view('/auth/login');
@@ -39,4 +42,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
