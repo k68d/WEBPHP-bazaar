@@ -24,7 +24,6 @@ class UsersTableSeeder extends Seeder
             User::create([
                 'name' => $roleUsersData[$role->name]['name'],
                 'email' => $roleUsersData[$role->name]['email'],
-                // Here, we set the password to !Ab12345 for all users
                 'password' => Hash::make('!Ab12345'),
                 'role_id' => $role->id,
             ]);
