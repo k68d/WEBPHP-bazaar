@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdvertentieController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\ContractController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,10 +45,11 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// Adjust the route as needed
-Route::get('/Business/create_contract', [BusinessController::class, 'showCreateForm'])->middleware('isBusiness')->name('contracts.create');
-
-// Route to handle the form submission and generate the PDF
-Route::post('/Business/generate_contract', [BusinessController::class, 'createContract'])->middleware('isBusiness')->name('contracts.generate');
+Route::middleware(['auth', 'isBusiness'])->group(function () {
+    Route::get('/contracts/create', [ContractController::class, 'create'])->name('contracts.create');
+    Route::post('/contracts', [ContractController::class, 'store'])->name('contracts.store');
+    Route::get('/contracts/{contract}/download', [ContractController::class, 'download'])->name('contracts.export');
+});
+Route::get('/contracts', [ContractController::class, 'index'])->middleware('auth')->name('contracts.index');
 
 require __DIR__ . '/auth.php';
