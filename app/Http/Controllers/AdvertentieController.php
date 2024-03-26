@@ -19,7 +19,7 @@ class AdvertentieController extends Controller
         return view('advertenties.create');
     }
 
-    public function store(Request $request) 
+    public function store(Request $request)
     {
         $request->validate([
             'titel' => 'required',
@@ -56,5 +56,32 @@ class AdvertentieController extends Controller
     public function destroy()
     {
 
+    }
+
+
+    public function getUserAdvertenties(Request $request)
+    {
+        $user = $request->user();
+        if (!$user->api_access) {
+            return response()->json(['message' => 'No endpoint.'], 403);
+        }
+        $advertenties = $user->advertenties()->get();
+
+        return response()->json($advertenties);
+    }
+
+    public function GetAdvertentie(Request $request, $advertentieId)
+    {
+        $user = $request->user();
+        if (!$user->api_access) {
+            return response()->json(['message' => 'No endpoint.'], 403);
+        }
+        $advertentie = $user->advertenties()->find($advertentieId);
+
+        if (!$advertentie) {
+            return response()->json(['message' => 'Advertentie not found.'], 404);
+        }
+
+        return response()->json($advertentie);
     }
 }

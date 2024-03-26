@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdvertentieController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ContractController;
+use App\Http\Controllers\LandingPageController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -45,11 +47,27 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::middleware(['auth', 'isBusiness'])->group(function () {
+Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/contracts/create', [ContractController::class, 'create'])->name('contracts.create');
     Route::post('/contracts', [ContractController::class, 'store'])->name('contracts.store');
     Route::get('/contracts/{contract}/download', [ContractController::class, 'download'])->name('contracts.export');
 });
 Route::get('/contracts', [ContractController::class, 'index'])->middleware('auth')->name('contracts.index');
+
+Route::get('/api/generateToken', [ProfileController::class, 'generateApiToken'])->middleware('auth')->name('profile.generateApiToken');
+
+Route::middleware(['auth:sanctum', 'isBusiness'])->group(function () {
+    Route::get('/api/advertenties', [AdvertentieController::class, 'getUserAdvertenties']);
+    Route::get('/api/advertentie/{advertentie}', [AdvertentieController::class, 'GetAdvertentie']);
+});
+
+
+Route::get('/landingpage-settings/create', [LandingPageController::class, 'create'])
+    ->middleware('isBusiness')->name('landingpage-settings.create');
+Route::post('/landingpage-settings', [LandingPageController::class, 'store'])
+    ->middleware('isBusiness')->name('landingpage-settings.store');
+
+Route::get('/landingpage/{url}', [LandingPageController::class, 'show'])->name('landingpage.show');
+
 
 require __DIR__ . '/auth.php';
