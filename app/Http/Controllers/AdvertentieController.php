@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Advertentie;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 
 class AdvertentieController extends Controller
 {
@@ -12,6 +13,12 @@ class AdvertentieController extends Controller
     {
         $advertenties = Advertentie::all();
         return view('advertenties.index', compact('advertenties'));
+    }
+    
+    public function show($id)
+    {
+        $advertenties = Advertentie::find($id);
+        return view('advertenties.show', compact('advertenties'));
     }
 
     public function create()

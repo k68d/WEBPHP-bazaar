@@ -14,11 +14,11 @@
     
     <div class="container">
         <div class="row">
-            
             @forelse ($advertenties as $advertentie)
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
-                    <div class="card-body"><img src="{{ asset('storage/' . $advertentie->afbeelding_path) }}" class="card-img-top" alt="{{ $advertentie->titel }}" style="height: 225px; width: 100%; display: block;">
+                    <div class="card-body">
+                        <img src="{{ asset('storage/' . $advertentie->afbeelding_path) }}" class="card-img-top" alt="{{ $advertentie->titel }}" style="height: 225px; width: 100%; display: block;">
                         <h5 class="card-title">{{ $advertentie->titel }}</h5>
                         <p class="card-text">{{ Str::limit($advertentie->beschrijving, 100) }}</p>
                         <p class="card-text">{{ $advertentie->type }}</p>
