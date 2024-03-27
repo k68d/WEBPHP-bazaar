@@ -49,14 +49,18 @@ Route::get('/contracts', [ContractController::class, 'index'])->middleware('auth
 Route::get('/api/generateToken', [ProfileController::class, 'generateApiToken'])->middleware('auth')->name('profile.generateApiToken');
 
 Route::middleware(['auth:sanctum', 'isBusiness'])->group(function () {
-    Route::get('/api/advertenties', [AdvertentieController::class, 'getUserAdvertenties']);
-    Route::get('/api/advertentie/{advertentie}', [AdvertentieController::class, 'GetAdvertentie']);
+    Route::get('/api/advertenties', [AdvertentieController::class, 'getUserAdvertenties'])->name('api.advertenties');
+    Route::get('/api/advertentie/{advertentie}', [AdvertentieController::class, 'GetAdvertentie'])->name('api.advertentie');
 });
 
 Route::get('/landingpage-settings/create', [LandingPageController::class, 'create'])
     ->middleware('isBusiness')->name('landingpage-settings.create');
+Route::get('/landingpage-settings/edit', [LandingPageController::class, 'edit'])
+    ->middleware('isBusiness')->name('landingpage-settings.edit');
 Route::post('/landingpage-settings', [LandingPageController::class, 'store'])
     ->middleware('isBusiness')->name('landingpage-settings.store');
+Route::patch('/landingpage-settings/{pageSetting}', [LandingPageController::class, 'update'])
+    ->middleware('isBusiness')->name('landingpage-settings.update');
 
 Route::get('/landingpage/{url}', [LandingPageController::class, 'show'])->name('landingpage.show');
 
