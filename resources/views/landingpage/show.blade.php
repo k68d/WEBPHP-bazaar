@@ -4,6 +4,7 @@
         @if (isset($pageSetting->components['hero']))
             @php
                 $heroData = $componentsData['hero'] ?? null;
+                $heroData['template'] = 3;
             @endphp
 
             {{-- Hero Template 1 --}}

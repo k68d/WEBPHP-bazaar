@@ -5,12 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdvertentieController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ContractController;
-<<<<<<< Updated upstream
 use App\Http\Controllers\LandingPageController;
-
-=======
 use App\Http\Controllers\HomeController;
->>>>>>> Stashed changes
 
 // Homge Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -40,13 +36,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-<<<<<<< Updated upstream
-
-Route::middleware(['auth', 'isAdmin'])->group(function () {
-=======
 // Contracts Routes for Business Users
 Route::middleware(['auth', 'isBusiness'])->group(function () {
->>>>>>> Stashed changes
     Route::get('/contracts/create', [ContractController::class, 'create'])->name('contracts.create');
     Route::post('/contracts', [ContractController::class, 'store'])->name('contracts.store');
     Route::get('/contracts/{contract}/download', [ContractController::class, 'download'])->name('contracts.export');
@@ -54,14 +45,13 @@ Route::middleware(['auth', 'isBusiness'])->group(function () {
 
 Route::get('/contracts', [ContractController::class, 'index'])->middleware('auth')->name('contracts.index');
 
-<<<<<<< Updated upstream
+
 Route::get('/api/generateToken', [ProfileController::class, 'generateApiToken'])->middleware('auth')->name('profile.generateApiToken');
 
 Route::middleware(['auth:sanctum', 'isBusiness'])->group(function () {
     Route::get('/api/advertenties', [AdvertentieController::class, 'getUserAdvertenties']);
     Route::get('/api/advertentie/{advertentie}', [AdvertentieController::class, 'GetAdvertentie']);
 });
-
 
 Route::get('/landingpage-settings/create', [LandingPageController::class, 'create'])
     ->middleware('isBusiness')->name('landingpage-settings.create');
@@ -70,8 +60,4 @@ Route::post('/landingpage-settings', [LandingPageController::class, 'store'])
 
 Route::get('/landingpage/{url}', [LandingPageController::class, 'show'])->name('landingpage.show');
 
-
-=======
-// Include Auth Routes
->>>>>>> Stashed changes
 require __DIR__ . '/auth.php';
