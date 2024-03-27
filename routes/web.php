@@ -11,9 +11,20 @@ use App\Http\Controllers\HomeController;
 // Homge Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Advertenties Routes
+Route::middleware(['auth', 'verified', 'isBusiness'])->group(function () {
+    Route::get('/advertenties/upload', [AdvertentieController::class, 'showUploadForm'])->name('advertenties.upload.show');
+    Route::post('/advertenties/upload', [AdvertentieController::class, 'processCsvUpload'])->name('advertenties.upload.process');
+    Route::get('/advertenties/upload/overview', [AdvertentieController::class, 'showUploadOverview'])->name('advertenties.upload.overview');
+    Route::post('/advertenties/images/upload', [AdvertentieController::class, 'uploadImages'])->name('advertenties.images.upload');
+});
+
+// Resource route voor advertenties
 Route::resource('advertenties', AdvertentieController::class)
     ->middleware(['auth', 'verified']);
+
+
+
+
 
 // Authentication Pages
 Route::get('/login', function () {
