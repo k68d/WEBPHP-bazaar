@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdvertentieController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ContractController;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,5 +53,12 @@ Route::middleware(['auth', 'isBusiness'])->group(function () {
     Route::get('/contracts/{contract}/download', [ContractController::class, 'download'])->name('contracts.export');
 });
 Route::get('/contracts', [ContractController::class, 'index'])->middleware('auth')->name('contracts.index');
+
+
+Route::get('/lang/{lang}', function ($lang, Request $request) {
+    Session::put('locale', $lang);
+    return back();
+})->name('lang.switch');
+
 
 require __DIR__ . '/auth.php';
