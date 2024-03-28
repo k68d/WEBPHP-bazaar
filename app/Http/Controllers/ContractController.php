@@ -13,20 +13,45 @@ use Carbon\Carbon;
 class ContractController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        $contracts = Contract::where('user_id_one', $user->id)
-            ->orWhere('user_id_two', $user->id)
-            ->get();
 
-        $allContracts = $user->hasRole('Admin') ? Contract::all() : null;
+        // Filters en sortering voor alle contracten
+        $allContractsQuery = Contract::query();
+        if ($request->filled('all_filter_name')) {
+            $allContractsQuery->whereHas('userOne', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->all_filter_name . '%');
+            })->orWhereHas('userTwo', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->all_filter_name . '%');
+            });
+        }
+        if ($request->filled('all_sort')) {
+            $allContractsQuery->orderBy('contract_date', $request->all_sort == 'date_asc' ? 'asc' : 'desc');
+        }
+        $allContracts = $user->hasRole('Admin') ? $allContractsQuery->paginate(10, ['*'], 'allContractsPage')->withQueryString() : null;
+
+        // Filters en sortering voor betrokken contracten
+        $contractsQuery = Contract::where('user_id_one', $user->id)->orWhere('user_id_two', $user->id);
+        if ($request->filled('involved_filter_name')) {
+            $contractsQuery->whereHas('userOne', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->involved_filter_name . '%');
+            })->orWhereHas('userTwo', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->involved_filter_name . '%');
+            });
+        }
+        if ($request->filled('involved_sort')) {
+            $contractsQuery->orderBy('contract_date', $request->involved_sort == 'date_asc' ? 'asc' : 'desc');
+        }
+        $contracts = $contractsQuery->paginate(10, ['*'], 'contractsPage')->withQueryString();
 
         return view('contracts.index', [
             'contracts' => $contracts,
             'allContracts' => $allContracts
         ]);
     }
+
+
 
 
     public function download($id)
@@ -75,7 +100,6 @@ class ContractController extends Controller
             'status' => 'required|string',
             'additional_info' => 'nullable|string',
         ]);
-
 
         Contract::create($validatedData);
 

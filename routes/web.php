@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Contracts Routes for Business Users
-Route::middleware(['auth', 'isBusiness'])->group(function () {
+Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/contracts/create', [ContractController::class, 'create'])->name('contracts.create');
     Route::post('/contracts', [ContractController::class, 'store'])->name('contracts.store');
     Route::get('/contracts/{contract}/download', [ContractController::class, 'download'])->name('contracts.export');

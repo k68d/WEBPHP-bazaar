@@ -11,9 +11,37 @@ use League\Csv\Reader;
 
 class AdvertentieController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $advertenties = Advertentie::all();
+        // Bouw de query op basis van de filter- en sorteerinput
+        $query = Advertentie::query();
+
+        // Als er een filter voor de titel is opgegeven
+        if ($request->filled('filter_titel')) {
+            $query->where('titel', 'like', '%' . $request->filter_titel . '%');
+        }
+
+        // Sorteer de resultaten
+        if ($request->filled('sorteer')) {
+            switch ($request->sorteer) {
+                case 'titel_asc':
+                    $query->orderBy('titel', 'asc');
+                    break;
+                case 'titel_desc':
+                    $query->orderBy('titel', 'desc');
+                    break;
+                case 'prijs_laag':
+                    $query->orderBy('prijs', 'asc');
+                    break;
+                case 'prijs_hoog':
+                    $query->orderBy('prijs', 'desc');
+                    break;
+            }
+        }
+
+        // Voer de query uit met paginatie
+        $advertenties = $query->paginate(20)->withQueryString();
+
         return view('advertenties.index', compact('advertenties'));
     }
 
