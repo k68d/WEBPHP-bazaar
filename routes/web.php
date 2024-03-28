@@ -23,10 +23,10 @@ Route::middleware(['auth', 'verified', 'isBusiness'])->group(function () {
 // Resource route voor advertenties
 Route::resource('advertenties', AdvertentieController::class)
     ->middleware(['auth', 'verified']);
-
-
-
-
+// Advertenties Routes
+Route::middleware(['auth', 'isStandard'])->group(function () {
+    Route::get('/advertenties/create', [AdvertentieController::class, 'create'])->name('advertenties.create');
+});
 
 // Authentication Pages
 Route::get('/login', function () {

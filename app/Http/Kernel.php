@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'isBusiness' => \App\Http\Middleware\UserIsBusinessRole::class,
         'setLanguage' => \App\Http\Middleware\SetLanguage::class,
         'isAdmin' => \App\Http\Middleware\UserIsAdminRole::class,
+        'isStandard' => \App\Http\Middleware\UserIsStandardRole::class,
     ];
     
 }
