@@ -17,6 +17,8 @@ class UserIsBusinessRole
     public function handle(Request $request, Closure $next)
     {
         if (!Auth::check() || !Auth::user()->hasRole('Business')) {
+        dd(Auth::user());
+
             return redirect('/')->with('error', 'Je hebt geen toegang tot deze pagina.');
         }
 
