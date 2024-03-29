@@ -24,7 +24,6 @@ class User extends Authenticatable
         'role_id',
     ];
 
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -47,8 +46,19 @@ class User extends Authenticatable
 
     public function advertenties()
     {
-        return $this->hasMany(Advertentie::class, 'user_id');
+        return $this->hasMany(Advertisement::class, 'user_id');
     }
+
+    public function purchasedAdvertisements()
+    {
+        return $this->belongsToMany(Advertisement::class, 'sale_history', 'user_id', 'advertisement_id')->withTimestamps();
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Advertisement::class, 'favorite_advertisements')->withTimestamps();
+    }
+
 
     public function role()
     {

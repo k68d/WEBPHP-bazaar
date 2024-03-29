@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdvertentieController;
+use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ContractController;
 use Illuminate\Support\Facades\Session;
@@ -14,19 +15,24 @@ use App\Http\Controllers\HomeController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'verified', 'isBusiness'])->group(function () {
-    Route::get('/advertenties/upload', [AdvertentieController::class, 'showUploadForm'])->name('advertenties.upload.show');
-    Route::post('/advertenties/upload', [AdvertentieController::class, 'processCsvUpload'])->name('advertenties.upload.process');
-    Route::get('/advertenties/upload/overview', [AdvertentieController::class, 'showUploadOverview'])->name('advertenties.upload.overview');
-    Route::post('/advertenties/images/upload', [AdvertentieController::class, 'uploadImages'])->name('advertenties.images.upload');
+    Route::get('/advertenties/upload', [AdvertisementController::class, 'showUploadForm'])->name('advertenties.upload.show');
+    Route::post('/advertenties/upload', [AdvertisementController::class, 'processCsvUpload'])->name('advertenties.upload.process');
+    Route::get('/advertenties/upload/overview', [AdvertisementController::class, 'showUploadOverview'])->name('advertenties.upload.overview');
+    Route::post('/advertenties/images/upload', [AdvertisementController::class, 'uploadImages'])->name('advertenties.images.upload');
 });
 
 // Resource route voor advertenties
-Route::resource('advertenties', AdvertentieController::class)
+Route::resource('advertenties', AdvertisementController::class)
     ->middleware(['auth', 'verified']);
-// Advertenties Routes
 Route::middleware(['auth', 'isStandard'])->group(function () {
-    Route::get('/advertenties/create', [AdvertentieController::class, 'create'])->name('advertenties.create');
+    Route::get('/advertenties/create', [AdvertisementController::class, 'create'])->name('advertenties.create');
 });
+Route::post('/advertenties/{advertisement}/purchase', [AdvertisementController::class, 'purchase'])
+    ->name('advertisement.purchase');
+Route::get('/advertentie', [AdvertisementController::class, 'index'])
+    ->name('advertisements.index');
+
+
 
 // Authentication Pages
 Route::get('/login', function () {
@@ -44,7 +50,11 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 // Profile Routes
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/history', [ProfileController::class, 'history'])->name('profile.history');
+    Route::get('/profile/favorites', [ProfileController::class, 'favorites'])->name('profile.favorites');
+    Route::post('profile/favorites/{advertisement}', [ProfileController::class, 'addFavorite'])->name('profile.addfavorite');
+    Route::delete('profile/favorites/{advertisement}', [ProfileController::class, 'removeFavorite'])->name('profile.removefavorite');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
@@ -67,8 +77,8 @@ Route::get('/lang/{lang}', function ($lang, Request $request) {
 Route::get('/api/generateToken', [ProfileController::class, 'generateApiToken'])->middleware('auth')->name('profile.generateApiToken');
 
 Route::middleware(['auth:sanctum', 'isBusiness'])->group(function () {
-    Route::get('/api/advertenties', [AdvertentieController::class, 'getUserAdvertenties'])->name('api.advertenties');
-    Route::get('/api/advertentie/{advertentie}', [AdvertentieController::class, 'GetAdvertentie'])->name('api.advertentie');
+    Route::get('/api/advertenties', [AdvertisementController::class, 'getUserAdvertenties'])->name('api.advertenties');
+    Route::get('/api/advertentie/{advertentie}', [AdvertisementController::class, 'GetAdvertentie'])->name('api.advertentie');
 });
 
 Route::get('/landingpage-settings/create', [LandingPageController::class, 'create'])

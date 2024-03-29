@@ -38,6 +38,14 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
+                        <x-dropdown-link :href="route('profile.history')">
+                            {{ __('Koophistorie') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('profile.favorites')">
+                            {{ __('Favorieten') }}
+                        </x-dropdown-link>
+
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

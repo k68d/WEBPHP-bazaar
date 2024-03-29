@@ -60,8 +60,8 @@
                                     <img src="{{ asset('storage/' . $advertentie->afbeelding_path) }}"
                                         class="card-img-top" alt="{{ $advertentie->titel }}"
                                         style="height: 225px; width: 100%; display: block;">
-                                    <h5 class="card-title">{{ $advertentie->titel }}</h5>
-                                    <p class="card-text">{{ Str::limit($advertentie->beschrijving, 100) }}</p>
+                                    <h5 class="card-title">{{ $advertentie->title }}</h5>
+                                    <p class="card-text">{{ Str::limit($advertentie->description, 100) }}</p>
                                     <p class="card-text">{{ $advertentie->type }}</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
@@ -70,7 +70,7 @@
                                             <a href="{{ route('advertenties.edit', $advertentie) }}"
                                                 class="btn btn-sm btn-outline-secondary">Bewerk</a>
                                         </div>
-                                        <small class="text-muted">€{{ $advertentie->prijs }}</small>
+                                        <small class="text-muted">€{{ $advertentie->price }}</small>
                                     </div>
                                 </div>
                             </div>
@@ -97,5 +97,4 @@
                 Maak</button></a>
 
 </body>
-
 </html>

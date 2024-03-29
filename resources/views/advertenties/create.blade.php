@@ -10,28 +10,28 @@
         <form method="POST" action="{{ route('advertenties.store') }}" enctype="multipart/form-data">
             @csrf
             <div>
-                <label for="titel">Titel:</label>
-                <input type="text" id="titel" name="titel" required>
+                <label for="title">Titel:</label>
+                <input type="text" id="title" name="title" required>
             </div>
             <div>
-                <label for="beschrijving">Beschrijving:</label>
-                <textarea id="beschrijving" name="beschrijving" required></textarea>
+                <label for="description">Beschrijving:</label>
+                <textarea id="description" name="description" required></textarea>
             </div>
             <div>
-                <label for="prijs">Prijs:</label>
-                <input type="text" id="prijs" name="prijs" required>
+                <label for="price">Prijs:</label>
+                <input type="number" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" placeholder="€0" id="price" name="price" min="0.00" max="99999.99" step="0.01" required>
             </div>
             <div>
                 <label for="type">Type advertentie:</label>
                 <select id="type" name="type" required>
                     <option value="">Selecteer een type...</option>
-                    <option value="normaal">Normaal</option>
-                    <option value="verhuur">Verhuur</option>
+                    <option value="Verkoop">Verkoop</option>
+                    <option value="Verhuur">Verhuur</option>
                 </select>
             </div>
             <div>
-                <label for="afbeelding">Afbeelding:</label>
-                <input type="file" id="afbeelding" name="afbeelding">
+                <label for="image">Afbeelding:</label>
+                <input type="file" id="image" name="image">
             </div>    
             <button type="submit">Plaats Advertentie</button>
         </form>

@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Advertentie;
+use App\Models\User;
+use App\Models\Advertisement;
 use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Validator;
 use League\Csv\Reader;
 
-class AdvertentieController extends Controller
+class AdvertisementController extends Controller
 {
     public function index(Request $request)
     {
         // Bouw de query op basis van de filter- en sorteerinput
-        $query = Advertentie::query();
+        $query = Advertisement::query();
 
         // Als er een filter voor de titel is opgegeven
         if ($request->filled('filter_titel')) {
@@ -41,21 +42,24 @@ class AdvertentieController extends Controller
 
         // Voer de query uit met paginatie
         $advertenties = $query->paginate(20)->withQueryString();
-
         return view('advertenties.index', compact('advertenties'));
     }
 
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $advertentie = Advertentie::find($id);
-        if (!$advertentie) {
-            abort(404);
-        }
-
+        $advertentie = Advertisement::findOrFail($id);
+    
+        // Het genereren van een QR-code voor de advertentie.
         $qrCode = QrCode::size(200)->generate(route('advertenties.show', $advertentie->id));
-
-        return view('advertenties.show', compact('advertentie', 'qrCode'));
+    
+        // Check of de advertentie al een favoriet is van de gebruiker.
+        $isFavorite = false;
+        if ($user = $request->user()) {
+            $isFavorite = $user->favorites()->where('advertisement_id', $advertentie->id)->exists();
+        }
+    
+        return view('advertenties.show', compact('advertentie', 'qrCode', 'isFavorite'));
     }
 
 
@@ -67,21 +71,21 @@ class AdvertentieController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'titel' => 'required',
-            'beschrijving' => 'required',
-            'prijs' => 'required|numeric',
-            'type' => 'required|in:normaal,verhuur',
-            'afbeelding' => 'image|nullable',
+            'title' => 'required',
+            'description' => 'required',
+            'price' => 'required|numeric',
+            'type' => 'required|in:Verkoop,Verhuur',
+            'image' => 'image|nullable',
         ]);
 
-        $path = $request->file('afbeelding') ? $request->file('afbeelding')->store('afbeeldingen', 'public') : null;
+        $path = $request->file('image') ? $request->file('image')->store('afbeeldingen', 'public') : null;
 
-        Advertentie::create([
-            'titel' => $request->titel,
-            'beschrijving' => $request->beschrijving,
-            'prijs' => $request->prijs,
+        Advertisement::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'price' => $request->price,
             'type' => $request->type,
-            'afbeelding_path' => $path,
+            'image_path' => $path,
             'user_id' => Auth::id(),
         ]);
 
@@ -101,6 +105,26 @@ class AdvertentieController extends Controller
     public function destroy()
     {
 
+    }
+
+    public function purchase($advertisementId)
+    {
+        $user = Auth::user(); // Haal de momenteel ingelogde gebruiker op
+        $advertisement = Advertisement::findOrFail($advertisementId); // Vind de advertentie of gooi een fout als deze niet bestaat
+
+        // Controleer of de ingelogde gebruiker niet de eigenaar is van de advertentie
+        if ($advertisement->user_id == $user->id) {
+            return back()->with('error', 'Je kunt je eigen advertenties niet kopen.');
+        }
+
+        if ($advertisement->purchasers->count() > 0) {
+            return back()->with('error', 'Deze advertentie is al verkocht.');
+        }
+
+        // Voeg de advertentie toe aan de gekochte advertenties van de gebruiker
+        $user->purchasedAdvertisements()->attach($advertisement);
+
+        return redirect()->route('advertisements.index')->with('success', 'Advertentie succesvol gekocht.');
     }
 
     public function showUploadForm()
@@ -131,7 +155,7 @@ class AdvertentieController extends Controller
             ])->validate();
 
             // Maak een nieuwe advertentie aan met het gevalideerde record
-            $advertentie = Advertentie::create([
+            $advertentie = Advertisement::create([
                 'titel' => $validatedData['titel'],
                 'beschrijving' => $validatedData['beschrijving'],
                 'prijs' => $validatedData['prijs'],
@@ -154,7 +178,7 @@ class AdvertentieController extends Controller
     public function showUploadOverview()
     {
         $advertentieIds = session('uploaded_advertenties', []);
-        $advertenties = Advertentie::whereIn('id', $advertentieIds)->get();
+        $advertenties = Advertisement::whereIn('id', $advertentieIds)->get();
 
         return view('advertenties.overview', compact('advertenties'));
     }
@@ -168,7 +192,7 @@ class AdvertentieController extends Controller
         foreach ($request->afbeeldingen as $advertentieId => $afbeelding) {
             $path = $afbeelding->store('afbeeldingen', 'public');
 
-            $advertentie = Advertentie::find($advertentieId);
+            $advertentie = Advertisement::find($advertentieId);
             if ($advertentie) {
                 $advertentie->update(['afbeelding_path' => $path]);
             }

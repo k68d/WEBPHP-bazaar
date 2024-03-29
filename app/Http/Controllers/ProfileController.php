@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Advertentie;
+use App\Models\Advertisement;
 
 class ProfileController extends Controller
 {
@@ -38,6 +39,13 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
+    public function history(Request $request): View
+    {
+        $advertenties = $request->user()->purchasedAdvertisements()->get();
+
+        return view('profile.history', compact('advertenties'));
+    }
+
     /**
      * Delete the user's account.
      */
@@ -58,6 +66,31 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function favorites(Request $request)
+    {
+        $user = $request->user();
+        $favorites = $user->favorites()->paginate(10); 
+
+        return view('profile.favorites', compact('favorites'));
+    }
+
+    public function addFavorite(Request $request, $advertisementId)
+    {
+        $user = $request->user();
+        $user->favorites()->syncWithoutDetaching([$advertisementId]);
+
+        return back()->with('success', 'Advertentie toegevoegd aan favorieten.');
+    }
+
+    public function removeFavorite(Request $request, $advertisementId)
+    {
+        $user = $request->user();
+        $user->favorites()->detach($advertisementId);
+
+        return back()->with('success', 'Advertentie verwijderd van favorieten.');
+    }
+
 
     public function generateApiToken(Request $request)
     {
