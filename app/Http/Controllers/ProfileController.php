@@ -70,7 +70,7 @@ class ProfileController extends Controller
     public function favorites(Request $request)
     {
         $user = $request->user();
-        $favorites = $user->favorites()->paginate(10); 
+        $favorites = $user->favorites()->paginate(10);
 
         return view('profile.favorites', compact('favorites'));
     }

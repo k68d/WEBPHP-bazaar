@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\Role;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -19,11 +20,13 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
+        $role = Role::create(['name' => 'admin']);
         $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
+            'role_id' => $role->id,
         ]);
 
         $this->assertAuthenticated();
