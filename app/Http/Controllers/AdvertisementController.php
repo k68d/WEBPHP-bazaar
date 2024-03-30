@@ -16,6 +16,7 @@ class AdvertisementController extends Controller
     {
         // Bouw de query op basis van de filter- en sorteerinput
         $query = Advertisement::query();
+        Advertisement::factory(1)->create();
 
         // Als er een filter voor de titel is opgegeven
         if ($request->filled('filter_titel')) {
@@ -49,16 +50,16 @@ class AdvertisementController extends Controller
     public function show(Request $request, $id)
     {
         $advertentie = Advertisement::findOrFail($id);
-    
+
         // Het genereren van een QR-code voor de advertentie.
         $qrCode = QrCode::size(200)->generate(route('advertenties.show', $advertentie->id));
-    
+
         // Check of de advertentie al een favoriet is van de gebruiker.
         $isFavorite = false;
         if ($user = $request->user()) {
             $isFavorite = $user->favorites()->where('advertisement_id', $advertentie->id)->exists();
         }
-    
+
         return view('advertenties.show', compact('advertentie', 'qrCode', 'isFavorite'));
     }
 

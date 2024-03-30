@@ -38,7 +38,7 @@
                                         class="font-semibold">{{ $contract->userTwo->name ?? 'N/A' }}</span>
                                 </p>
                                 @if (Auth::user()->hasRole('Admin'))
-                                    <a href="{{ route('contracts.export', $contract->id) }}"
+                                    <a href="{{ route('contracts.export', $contract->id) }}" dusk="export-pdf-link"
                                         class="inline-block mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">Exporteer
                                         PDF</a>
                                 @endif

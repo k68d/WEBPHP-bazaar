@@ -48,19 +48,19 @@ class UploadContractTest extends DuskTestCase
     {
 
         $adminUser = User::where('name', 'Admin User')->first();
-        $user1 = User::where('id', '!=', $adminUser->id)->first();
-        $user2 = User::where('id', '!=', $adminUser->id)->where('id', '!=', $user1->id)->first();
+        $user1 = User::where('id', '!=', $adminUser->id)->where('name', 'Business User')->first();
+        $user2 = User::where('id', '!=', $adminUser->id)->where('id', '!=', $user1->id)->where('name', 'Private User')->first();
 
         Contract::factory(1)->create(
             [
                 'description' => $this->text,
                 'user_id_one' => $user1->id,
+                'user_id_two' => $user2->id
             ]
         );
-        $this->browse(function (Browser $browser) use ($adminUser, $user1, $user2) {
+        $this->browse(function (Browser $browser) use ($user1, $user2) {
             $browser->loginAs($user1)
                 ->visit('/contracts')
-                ->screenshot('contract')
                 ->assertSee($this->text)
                 ->assertSee($user1->name)
                 ->assertSee($user2->name);
