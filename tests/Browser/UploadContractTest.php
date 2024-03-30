@@ -2,9 +2,11 @@
 
 namespace Tests\Browser;
 
+use App\Models\Contract;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTruncation;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -13,6 +15,7 @@ class UploadContractTest extends DuskTestCase
     /**
      * A Dusk test example.
      */
+    use DatabaseTruncation;
     public $text = 'Dit is een test contract.';
 
     public function testAdminCanCreateContract()
@@ -20,7 +23,6 @@ class UploadContractTest extends DuskTestCase
         $adminUser = User::where('name', 'Admin User')->first(); // Vervang dit met een geschikte methode om een admin gebruiker te verkrijgen
         $user1 = User::where('id', '!=', $adminUser->id)->first();
         $user2 = User::where('id', '!=', $adminUser->id)->where('id', '!=', $user1->id)->first();
-        dump($this->text);
 
         $this->browse(function (Browser $browser) use ($adminUser, $user1, $user2) {
             $browser->loginAs($adminUser)
@@ -32,6 +34,7 @@ class UploadContractTest extends DuskTestCase
                 ->type('contract_date', now()->format('d-m-Y'))
                 ->type('status', 'Concept')
                 ->click('@submit-contract-button')
+                ->pause(100)
                 ->assertPathIs('/contracts')
                 ->assertSee($user1->name)
                 ->assertSee($user2->name)
@@ -43,14 +46,21 @@ class UploadContractTest extends DuskTestCase
 
     public function testConfirmContract()
     {
+
         $adminUser = User::where('name', 'Admin User')->first();
         $user1 = User::where('id', '!=', $adminUser->id)->first();
         $user2 = User::where('id', '!=', $adminUser->id)->where('id', '!=', $user1->id)->first();
-        dump($this->text);
 
+        Contract::factory(1)->create(
+            [
+                'description' => $this->text,
+                'user_id_one' => $user1->id,
+            ]
+        );
         $this->browse(function (Browser $browser) use ($adminUser, $user1, $user2) {
             $browser->loginAs($user1)
                 ->visit('/contracts')
+                ->screenshot('contract')
                 ->assertSee($this->text)
                 ->assertSee($user1->name)
                 ->assertSee($user2->name);
