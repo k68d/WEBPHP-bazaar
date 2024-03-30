@@ -174,7 +174,6 @@
                             <input type="checkbox" name="components[highlighted_ads]" id="components_highlighted_ads"
                                 {{ old('components.highlighted_ads') ? 'checked' : '' }} class="mr-2">
                             <label for="components_highlighted_ads">Uitgelichte Advertenties</label>
-                            {{-- Geen extra details vereist voor uitgelichte advertenties, worden automatisch geladen --}}
                         </div>
                     </div>
 
@@ -185,7 +184,6 @@
                         document.getElementById('components_intro').addEventListener('change', function() {
                             document.getElementById('intro_details').style.display = this.checked ? '' : 'none';
                         });
-                        // Voeg soortgelijke JavaScript toe voor andere componenten indien nodig
                     </script>
 
 

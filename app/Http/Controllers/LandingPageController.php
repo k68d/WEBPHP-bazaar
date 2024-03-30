@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advertisement;
 use App\Models\PageSetting;
 use App\Models\Advertentie;
 use Illuminate\Http\Request;
@@ -35,8 +36,8 @@ class LandingPageController extends Controller
             'palette.primary' => 'nullable|string',
             'palette.secondary' => 'nullable|string',
             'palette.accent' => 'nullable|string',
-            'text_style.font' => 'nullable|string',
-            'text_style.size' => 'nullable|numeric',
+            'text_style.font' => 'required|string',
+            'text_style.size' => 'required|numeric',
             'components.hero' => 'nullable',
             'hero.template' => 'nullable|required_if:components.hero,on|in:1,2,3',
             'hero.title' => 'nullable|required_if:components.hero,on|string|max:255',
@@ -67,8 +68,8 @@ class LandingPageController extends Controller
         $test = PageSetting::create([
             'user_id' => Auth::id(),
             'page_url' => $validatedData['page_url'],
-            'palette' => isset ($validatedData['palette']) ? json_encode($request->input('palette')) : null,
-            'text_style' => isset ($validatedData['text_style']) ? json_encode($request->input('text_style')) : null,
+            'palette' => isset($validatedData['palette']) ? json_encode($request->input('palette')) : null,
+            'text_style' => isset($validatedData['text_style']) ? json_encode($request->input('text_style')) : null,
             'components' => $componentsData ? json_encode($componentsData) : null,
         ]);
 
@@ -103,7 +104,6 @@ class LandingPageController extends Controller
     public function edit()
     {
         $pageSetting = PageSetting::where('user_id', Auth::id())->firstOrFail();
-        // Pass the existing page setting to the edit view
         return view('landingpage.edit', compact('pageSetting'));
     }
 
@@ -124,8 +124,8 @@ class LandingPageController extends Controller
             'palette.primary' => 'nullable|string',
             'palette.secondary' => 'nullable|string',
             'palette.accent' => 'nullable|string',
-            'text_style.font' => 'nullable|string',
-            'text_style.size' => 'nullable|numeric',
+            'text_style.font' => 'required|string',
+            'text_style.size' => 'required|numeric',
             'components.hero' => 'nullable',
             'hero.template' => 'nullable|required_if:components.hero,on|in:1,2,3',
             'hero.title' => 'nullable|required_if:components.hero,on|string|max:255',
@@ -153,7 +153,7 @@ class LandingPageController extends Controller
 
     protected function getHighlightedAdsData()
     {
-        return Advertentie::where('user_id', Auth::id())->get();
+        return Advertisement::where('user_id', Auth::id())->get(); //TODO
     }
 
     protected function prepareComponentsData(Request $request)

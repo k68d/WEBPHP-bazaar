@@ -144,34 +144,27 @@ class AdvertisementController extends Controller
         $csv->setHeaderOffset(0); // Stel de eerste rij van CSV in als header.
 
         $records = $csv->getRecords(); // Haal de records uit het CSV-bestand.
-
         $advertentieIds = [];
         foreach ($records as $record) {
-            // Voer validatie uit op elk record voordat je het opslaat
             $validatedData = Validator::make($record, [
                 'titel' => 'required|string|max:255',
                 'beschrijving' => 'required|string',
                 'prijs' => 'required|numeric',
                 'type' => 'required|in:normaal,verhuur',
             ])->validate();
-
-            // Maak een nieuwe advertentie aan met het gevalideerde record
             $advertentie = Advertisement::create([
-                'titel' => $validatedData['titel'],
-                'beschrijving' => $validatedData['beschrijving'],
-                'prijs' => $validatedData['prijs'],
+                'title' => $validatedData['titel'],
+                'description' => $validatedData['beschrijving'],
+                'price' => $validatedData['prijs'],
                 'type' => $validatedData['type'],
-                'user_id' => auth()->id(), // Zorg dat je de geauthenticeerde gebruiker's ID opslaat.
+                'user_id' => auth()->id(),
             ]);
 
-            // Sla de ID van de nieuwe advertentie op voor latere weergave
             $advertentieIds[] = $advertentie->id;
         }
 
-        // Sla de IDs op in de sessie voor weergave op de overzichtspagina
         session(['uploaded_advertenties' => $advertentieIds]);
 
-        // Redirect naar de overzichtspagina
         return redirect()->route('advertenties.upload.overview');
     }
 

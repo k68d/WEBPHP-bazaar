@@ -68,6 +68,7 @@
 
         @if (isset($componentsData['highlighted_ads']))
             <div class="my-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <p>{{ __('highlighted adverisements') }}</p>
                 @foreach ($componentsData['highlighted_ads'] as $ad)
                     <div class="bg-white shadow-md rounded-lg overflow-hidden">
                         @if ($ad->afbeelding_path)
