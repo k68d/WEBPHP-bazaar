@@ -77,7 +77,7 @@ class ContractFactory extends Factory
             'user_id_two' => $userTwo->id,
             'description' => $this->faker->randomElement($descriptions),
             'contract_date' => $this->faker->dateTimeBetween('now', '+5 years')->format('Y-m-d'),
-            'status' => $this->faker->randomElement(['Concept', 'Actief', 'Voltooid']),
+            'status' => $this->faker->randomElement(['Active', 'Complete', 'Mockup']),
             'additional_info' => $this->faker->randomElement($additionalInfos),
         ];
     }
