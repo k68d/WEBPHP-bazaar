@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $advertentie->title }}</title>
     @vite('resources/css/app.css')
 </head>
+
 <body>
     @include('layouts.navbar')
     @if ($errors->any())
@@ -26,7 +28,7 @@
         <p class="mt-4">Beschrijving: {{ $advertentie->description }}</p>
         <p>Prijs: €{{ $advertentie->price }}</p>
         <p>Type: {{ $advertentie->type }}</p>
-        
+
         @if (auth()->user()->id !== $advertentie->user_id)
             @if ($advertentie->type === 'Verkoop')
                 <div>
@@ -45,16 +47,22 @@
                         @csrf
                         <div class="my-4">
                             <label for="begin_huur" class="block text-sm font-medium text-gray-700">Begin Huur</label>
-                            <input type="date" id="begin_huur" name="begin_huur" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+                            <input type="date" id="begin_huur" name="begin_huur"
+                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                required>
                         </div>
                         <div class="my-4">
                             <label for="eind_huur" class="block text-sm font-medium text-gray-700">Eind Huur</label>
-                            <input type="date" id="eind_huur" name="eind_huur" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
+                            <input type="date" id="eind_huur" name="eind_huur"
+                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                required>
                         </div>
-                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Huur</button>
+                        <button type="submit"
+                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Huur</button>
                     </form>
                 @else
-                    <p>Deze advertentie is momenteel gehuurd en zal beschikbaar zijn na {{ \Carbon\Carbon::parse($advertentie->eind_huur)->format('d-m-Y') }}.</p>
+                    <p>Deze advertentie is momenteel gehuurd en zal beschikbaar zijn na
+                        {{ \Carbon\Carbon::parse($advertentie->eind_huur)->format('d-m-Y') }}.</p>
                 @endif
             @endif
 
@@ -76,4 +84,5 @@
         {!! $qrCode !!}
     </div>
 </body>
+
 </html>

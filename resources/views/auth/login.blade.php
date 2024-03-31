@@ -59,7 +59,7 @@
                 </a>
             @endif
 
-            <x-primary-button class="ms-3">
+            <x-primary-button class="ms-3" dusk="dusk-login-button">
                 {{ __('texts.log_in') }}
             </x-primary-button>
         </div>

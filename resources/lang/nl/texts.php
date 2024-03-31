@@ -147,4 +147,5 @@ return [
     'csv_file' => 'CSV Bestand',
     'csv_overview' => 'Advertenties zijn ge-upload. Nu kunt u een afbeelding toevoegen aan elke advertentie.',
     'csv_entry' => 'Kies een afbeelding voor :title',
+
 ];

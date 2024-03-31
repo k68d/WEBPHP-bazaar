@@ -146,4 +146,5 @@ return [
     'csv_file' => 'CSV File',
     'csv_overview' => 'The advertisements have been uploaded. You are now adding an additional image to each advertisement.',
     'csv_entry' => 'Choose an Image for :title',
+
 ];

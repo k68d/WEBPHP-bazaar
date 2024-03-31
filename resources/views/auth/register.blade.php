@@ -54,7 +54,7 @@
                 {{ __('texts.already_registered') }}
             </a>
 
-            <x-primary-button class="ms-4">
+            <x-primary-button dusk="dusk-register-button" class="ms-4" id="register">
                 {{ __('texts.register') }}
             </x-primary-button>
         </div>
