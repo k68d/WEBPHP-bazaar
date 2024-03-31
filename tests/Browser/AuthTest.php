@@ -64,7 +64,6 @@ class AuthTest extends DuskTestCase
 
             $this->browse(function (Browser $browser) use ($user, $roleName) {
                 $browser->visit('/login')
-                    ->screenshot('test' . $roleName . 'login')
                     ->type('email', $user->email)
                     ->type('password', '!Ab12345')
                     ->press('@dusk-login-button')
