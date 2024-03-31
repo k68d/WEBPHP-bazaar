@@ -59,6 +59,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Advertisement::class, 'favorite_advertisements')->withTimestamps();
     }
 
+    public function writtenProductReviews()
+    {
+        return $this->hasMany(ProductReview::class);
+    }
 
     public function role()
     {

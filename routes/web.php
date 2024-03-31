@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductReviewController;
 
 // Homge Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -27,11 +28,11 @@ Route::resource('advertenties', AdvertisementController::class)
 Route::middleware(['auth', 'isStandard'])->group(function () {
     Route::get('/advertenties/create', [AdvertisementController::class, 'create'])->name('advertenties.create');
 });
-Route::post('/advertenties/{advertisement}/purchase', [AdvertisementController::class, 'purchase'])
-    ->name('advertisement.purchase');
-Route::get('/advertentie', [AdvertisementController::class, 'index'])
-    ->name('advertisements.index');
-
+Route::post('/advertenties/{advertisement}/purchase', [AdvertisementController::class, 'purchase'])->name('advertisement.purchase');
+Route::post('/advertisement/{advertisement}/rent', [AdvertisementController::class, 'rent'])->name('advertisement.rent');
+Route::get('/advertentie', [AdvertisementController::class, 'index'])->name('advertisements.index');
+Route::post('/advertisement/{advertisement}/return', [AdvertisementController::class, 'returnProduct'])->middleware('auth')->name('advertisement.return');
+Route::post('/advertisements/{advertisement}/reviews', [ProductReviewController::class, 'store'])->name('product.reviews.store');
 
 
 // Authentication Pages

@@ -12,13 +12,11 @@ class Advertisement extends Model
 
     protected $keyType = 'string'; // Geef aan dat de sleuteltype een string is.
     public $incrementing = false; // Geen auto-increment.
-    protected $fillable = ['title', 'description', 'price', 'type', 'image_path', 'user_id'];
+    protected $fillable = ['title', 'description', 'price', 'type', 'image_path', 'user_id', 'begin_huur', 'eind_huur', 'return_photo_path', 'renter_id'];
     
     protected static function boot()
     {
-        parent::boot();
-    
-        // Genereer een UUID wanneer er een nieuw model wordt aangemaakt.
+        parent::boot();    
         static::creating(function ($model) {
             $model->{$model->getKeyName()} = (string) Str::uuid();
         });
@@ -29,6 +27,11 @@ class Advertisement extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function renter()
+    {
+        return $this->belongsTo(User::class, 'renter_id');
+    }
+
     public function purchasers()
     {   
         return $this->belongsToMany(User::class, 'sale_history', 'advertisement_id', 'user_id')->withTimestamps();
@@ -37,5 +40,10 @@ class Advertisement extends Model
     public function favoredByUsers()
     {
         return $this->belongsToMany(User::class, 'favorite_advertisements')->withTimestamps();
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class);
     }
 }

@@ -49,7 +49,7 @@
                             </x-dropdown-link>
 
                             <x-dropdown-link :href="route('profile.favorites')">
-                                {{ __('Favorieten') }}
+                                {{ __('Mijn Favorieten') }}
                             </x-dropdown-link>
 
                             <!-- Authentication -->

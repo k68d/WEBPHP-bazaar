@@ -8,6 +8,7 @@ use App\Models\Advertisement;
 use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 use League\Csv\Reader;
 
 class AdvertisementController extends Controller
@@ -76,6 +77,8 @@ class AdvertisementController extends Controller
             'price' => 'required|numeric',
             'type' => 'required|in:Verkoop,Verhuur',
             'image' => 'image|nullable',
+            'begin_huur' => 'nullable|date',
+            'eind_huur' => 'nullable|date',
         ]);
 
         $path = $request->file('image') ? $request->file('image')->store('afbeeldingen', 'public') : null;
@@ -87,6 +90,8 @@ class AdvertisementController extends Controller
             'type' => $request->type,
             'image_path' => $path,
             'user_id' => Auth::id(),
+            'begin_huur' => $validatedData['begin_huur'] ?? null,
+            'eind_huur' => $validatedData['eind_huur'] ?? null,
         ]);
 
         return redirect()->route('advertenties.index')->with('success', 'Advertentie succesvol aangemaakt!');
@@ -102,17 +107,23 @@ class AdvertisementController extends Controller
 
     }
 
-    public function destroy()
+    public function rentalOverview()
     {
+        $user = Auth::user();
+        $rentals = Advertisement::where('renter_id', $user->id)
+                                ->whereNotNull('begin_huur')
+                                ->whereNotNull('eind_huur')
+                                ->orderBy('begin_huur', 'desc')
+                                ->get();
 
+        return view('advertenties.rentaloverview', compact('rentals'));          
     }
 
     public function purchase($advertisementId)
     {
-        $user = Auth::user(); // Haal de momenteel ingelogde gebruiker op
-        $advertisement = Advertisement::findOrFail($advertisementId); // Vind de advertentie of gooi een fout als deze niet bestaat
+        $user = Auth::user(); 
+        $advertisement = Advertisement::findOrFail($advertisementId); 
 
-        // Controleer of de ingelogde gebruiker niet de eigenaar is van de advertentie
         if ($advertisement->user_id == $user->id) {
             return back()->with('error', 'Je kunt je eigen advertenties niet kopen.');
         }
@@ -121,10 +132,71 @@ class AdvertisementController extends Controller
             return back()->with('error', 'Deze advertentie is al verkocht.');
         }
 
-        // Voeg de advertentie toe aan de gekochte advertenties van de gebruiker
         $user->purchasedAdvertisements()->attach($advertisement);
-
         return redirect()->route('advertisements.index')->with('success', 'Advertentie succesvol gekocht.');
+    }
+
+    public function rent(Request $request, $advertisementId)
+    {
+        
+        $advertisement = Advertisement::findOrFail($advertisementId);
+        $user = $advertisement->user;
+
+        if ($advertisement->type !== 'Verhuur') {
+            return back()->with('error', 'Deze advertentie kan niet gehuurd worden.');
+        }
+
+        $request->validate([
+            'begin_huur' => 'required|date|after_or_equal:today',
+            'eind_huur' => 'required|date|after:begin_huur',
+            'renter_id' => 'required',
+        ]);
+
+        $beginHuur = Carbon::parse($request->begin_huur);
+        $eindHuur = Carbon::parse($request->eind_huur);
+
+        if ($advertisement->begin_huur && $advertisement->eind_huur) {
+            $bestaandeBeginHuur = Carbon::parse($advertisement->begin_huur);
+            $bestaandeEindHuur = Carbon::parse($advertisement->eind_huur);
+            if ($beginHuur->between($bestaandeBeginHuur, $bestaandeEindHuur) || 
+                $eindHuur->between($bestaandeBeginHuur, $bestaandeEindHuur)) {
+                return back()->with('error', 'Deze advertentie is al gehuurd voor de opgegeven periode.');
+            }
+        }
+
+        $advertisement->update([
+            'renter_id' => Auth::id(),
+            'begin_huur' => $beginHuur,
+            'eind_huur' => $eindHuur,
+        ]);
+
+        $user->purchasedAdvertisements()->attach($advertisement);
+        return redirect()->route('advertisements.index')->with('success', 'De advertentie is succesvol gehuurd voor de opgegeven periode.');
+    }
+
+    public function returnProduct(Request $request, $advertisementId)
+    {
+        $request->validate([
+            'return_photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $user = Auth::user();
+        $advertisement = Advertisement::findOrFail($advertisementId);
+
+        if ($advertisement->renter_id !== $user->id) {
+            return back()->with('error', 'Je kunt alleen je eigen advertenties retourneren.');
+        }
+
+        $path = $request->file('return_photo')->store('afbeeldingen', 'public');
+
+        $advertisement->update([
+            'return_photo_path' => $path,
+            'begin_huur' => null,
+            'eind_huur' => null,
+            'renter_id' => null,
+        ]);
+
+        return redirect()->route('advertisements.index')->with('success', 'Advertentie succesvol geretourneerd.');
     }
 
     public function showUploadForm()
@@ -200,8 +272,6 @@ class AdvertisementController extends Controller
 
         return redirect()->route('advertenties.index')->with('success', 'Alle afbeeldingen zijn succesvol geüpload.');
     }
-
-
 
     public function getUserAdvertenties(Request $request)
     {
