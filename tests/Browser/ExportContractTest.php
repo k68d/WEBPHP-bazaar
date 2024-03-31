@@ -46,7 +46,6 @@ class ExportContractTest extends DuskTestCase
                 ->assertSee('Overzicht Contracten')
                 ->waitFor('@export-pdf-link')
                 ->click('@export-pdf-link')
-                ->screenshot('export-pdf')
                 ->assertPathIs('/contracts');
         });
     }

@@ -27,6 +27,7 @@ class BulkAdvertisementsUploadTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user, $sampleCsvPath, $sampleImagePath) {
             $browser->loginAs($user)
                 ->visit('/advertenties/upload')
+                ->screenshot('bulk-advertisements-upload')
                 ->assertSee('Upload Advertenties CSV')
                 ->attach('csv_file', $sampleCsvPath)
                 ->press('@upload-csv-button')
