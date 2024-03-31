@@ -24,14 +24,17 @@
                                         class="block text-sm font-medium text-gray-300">
                                         {{ __('Choose an Image for ":title"', ['title' => $advertentie->titel]) }}
                                     </label>
-                                    <input type="file" id="afbeelding_{{ $advertentie->id }}"
-                                        name="afbeeldingen[{{ $advertentie->id }}]"
+                                    <input dusk="afbeelding-{{ $advertentie->id }}" type="file"
+                                        id="afbeelding_{{ $advertentie->id }}"
+                                        name="afbeeldingen[{{ $advertentie->id }}]" data-id="{{ $advertentie->id }}"
                                         class="mt-1 block w-full rounded-md border-gray-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                         required>
+
+
                                 </div>
                             </div>
                         @endforeach
-                        <button type="submit"
+                        <button type="submit" dusk="upload-all"
                             class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
                             {{ __('Upload All Images') }}
                         </button>

@@ -17,6 +17,7 @@ class AdvertisementController extends Controller
     {
         // Bouw de query op basis van de filter- en sorteerinput
         $query = Advertisement::query();
+        Advertisement::factory(1)->create();
 
         // Als er een filter voor de titel is opgegeven
         if ($request->filled('filter_titel')) {
@@ -50,16 +51,16 @@ class AdvertisementController extends Controller
     public function show(Request $request, $id)
     {
         $advertentie = Advertisement::findOrFail($id);
-    
+
         // Het genereren van een QR-code voor de advertentie.
         $qrCode = QrCode::size(200)->generate(route('advertenties.show', $advertentie->id));
-    
+
         // Check of de advertentie al een favoriet is van de gebruiker.
         $isFavorite = false;
         if ($user = $request->user()) {
             $isFavorite = $user->favorites()->where('advertisement_id', $advertentie->id)->exists();
         }
-    
+
         return view('advertenties.show', compact('advertentie', 'qrCode', 'isFavorite'));
     }
 
@@ -215,34 +216,27 @@ class AdvertisementController extends Controller
         $csv->setHeaderOffset(0); // Stel de eerste rij van CSV in als header.
 
         $records = $csv->getRecords(); // Haal de records uit het CSV-bestand.
-
         $advertentieIds = [];
         foreach ($records as $record) {
-            // Voer validatie uit op elk record voordat je het opslaat
             $validatedData = Validator::make($record, [
                 'titel' => 'required|string|max:255',
                 'beschrijving' => 'required|string',
                 'prijs' => 'required|numeric',
                 'type' => 'required|in:normaal,verhuur',
             ])->validate();
-
-            // Maak een nieuwe advertentie aan met het gevalideerde record
             $advertentie = Advertisement::create([
-                'titel' => $validatedData['titel'],
-                'beschrijving' => $validatedData['beschrijving'],
-                'prijs' => $validatedData['prijs'],
+                'title' => $validatedData['titel'],
+                'description' => $validatedData['beschrijving'],
+                'price' => $validatedData['prijs'],
                 'type' => $validatedData['type'],
-                'user_id' => auth()->id(), // Zorg dat je de geauthenticeerde gebruiker's ID opslaat.
+                'user_id' => auth()->id(),
             ]);
 
-            // Sla de ID van de nieuwe advertentie op voor latere weergave
             $advertentieIds[] = $advertentie->id;
         }
 
-        // Sla de IDs op in de sessie voor weergave op de overzichtspagina
         session(['uploaded_advertenties' => $advertentieIds]);
 
-        // Redirect naar de overzichtspagina
         return redirect()->route('advertenties.upload.overview');
     }
 

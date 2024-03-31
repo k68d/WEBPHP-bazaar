@@ -25,6 +25,7 @@ Route::middleware(['auth', 'verified', 'isBusiness'])->group(function () {
 // Resource route voor advertenties
 Route::resource('advertenties', AdvertisementController::class)
     ->middleware(['auth', 'verified']);
+
 Route::middleware(['auth', 'isStandard'])->group(function () {
     Route::get('/advertenties/create', [AdvertisementController::class, 'create'])->name('advertenties.create');
 });

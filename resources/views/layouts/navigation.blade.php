@@ -41,15 +41,15 @@
 
                         <x-slot name="content">
                             <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
+                                {{ __('texts.profile') }}
                             </x-dropdown-link>
 
                             <x-dropdown-link :href="route('profile.history')">
-                                {{ __('Koophistorie') }}
+                                {{ __('texts.buy_history') }}
                             </x-dropdown-link>
 
                             <x-dropdown-link :href="route('profile.favorites')">
-                                {{ __('Mijn Favorieten') }}
+                                {{ __('texts.favourite') }}
                             </x-dropdown-link>
 
                             <!-- Authentication -->
@@ -59,7 +59,7 @@
                                 <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                    {{ __('Log Out') }}
+                                    {{ __('texts.logout') }}
                                 </x-dropdown-link>
                             </form>
                         </x-slot>
@@ -68,7 +68,7 @@
             @else
                 <div class="hidden sm:flex sm:items-center sm:ms-6">
                     <x-nav-link :href="route('login')" :active="request()->routeIs('login')">
-                        {{ __('Login') }}
+                        {{ __('texts.login') }}
                     </x-nav-link>
                 </div>
             @endif
@@ -88,8 +88,25 @@
             </div>
         </div>
     </div>
-
-    <!-- Responsive Navigation Menu -->
+    <div x-data="{ open: false }" @click.away="open = false" class="relative inline-block text-left">
+        <button @click="open = !open"
+            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+            {{ strtoupper(App::getLocale()) }}
+        </button>
+        <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="transform opacity-0 scale-95"
+            x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="transform opacity-100 scale-100"
+            x-transition:leave-end="transform opacity-0 scale-95"
+            class="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+            <div class="py-1">
+                <a href="{{ route('lang.switch', 'nl') }}"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Nederlands</a>
+                <a href="{{ route('lang.switch', 'en') }}"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">English</a>
+            </div>
+        </div>
+    </div <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
@@ -117,7 +134,7 @@
                         <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                            {{ __('Log Out') }}
+                            {{ __('texts.logout') }}
                         </x-responsive-nav-link>
                     </form>
                 </div>
@@ -147,10 +164,7 @@
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Nederlands</a>
                 <a href="{{ route('lang.switch', 'en') }}"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">English</a>
-                <!-- Voeg meer talen toe indien nodig -->
             </div>
         </div>
     </div>
-
-
 </nav>

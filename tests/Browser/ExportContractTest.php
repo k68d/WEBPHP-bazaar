@@ -4,14 +4,14 @@ namespace Tests\Browser;
 
 use App\Models\Contract;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTruncation;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
 class ExportContractTest extends DuskTestCase
 {
 
-    use DatabaseMigrations;
+    use DatabaseTruncation;
 
 
     public function testAdminAccessToExportFunction()
@@ -38,16 +38,18 @@ class ExportContractTest extends DuskTestCase
     {
         $adminUser = User::where('name', 'Admin User')->first();
 
+        Contract::factory(3)->create();
+
         $this->browse(function (Browser $browser) use ($adminUser) {
             $browser->loginAs($adminUser)
                 ->visit('/contracts')
+                ->assertSee('Overzicht Contracten')
+                ->waitFor('@export-pdf-link')
+                ->click('@export-pdf-link')
                 ->assertPathIs('/contracts');
         });
     }
 
-    /**
-     * Test of non-admins geen toegang hebben tot de export URL.
-     */
     public function testNonAdminAccessToExportURL()
     {
         $nonAdminUser = User::where('name', '!=', 'Admin User')->first();
