@@ -1,35 +1,35 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-12">
-        <h2 class="text-2xl font-semibold leading-tight">Mijn Gehuurde Producten</h2>
-        <div class="bg-white shadow-md rounded my-6">
-            <table class="min-w-full table-auto">
-                <thead class="justify-between">
-                    <tr class="bg-gray-800">
-                        <th class="px-16 py-2">
-                            <span class="text-gray-300">Product</span>
-                        </th>
-                        <th class="px-16 py-2">
-                            <span class="text-gray-300">Begin Huur</span>
-                        </th>
-                        <th class="px-16 py-2">
-                            <span class="text-gray-300">Eind Huur</span>
-                        </th>
-                        <th class="px-16 py-2">
-                            <span class="text-gray-300">Retour Foto</span>
-                        </th>
+    <div class="max-w-6xl mx-auto sm:px-6 lg:px-8 py-12">
+        <h1 class="text-2xl font-semibold mb-6">{{ __('texts.my_rented_products') }}</h1>
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <table class="min-w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ __('texts.product') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ __('texts.start_rent') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ __('texts.end_rent') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ __('texts.return_photo') }}</th>
                     </tr>
                 </thead>
-                <tbody class="bg-gray-200">
-                    @foreach($rentals as $rental)
-                        <tr class="bg-white border-4 border-gray-200">
-                            <td class="px-16 py-2">{{ $rental->title }}</td>
-                            <td class="px-16 py-2">{{ $rental->begin_huur->format('d-m-Y') }}</td>
-                            <td class="px-16 py-2">{{ $rental->eind_huur->format('d-m-Y') }}</td>
-                            <td class="px-16 py-2">
-                                @if($rental->return_photo_path)
-                                    <img src="{{ asset('storage/' . $rental->return_photo_path) }}" alt="Retour foto" class="w-20 h-20 object-cover rounded">
+                <tbody>
+                    @foreach ($rentals as $rental)
+                        <tr class="border-b">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {{ $rental->title }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $rental->begin_huur->format('d-m-Y') }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $rental->eind_huur->format('d-m-Y') }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                @if ($rental->return_photo_path)
+                                    <img src="{{ asset('storage/' . $rental->return_photo_path) }}"
+                                        alt="{{ __('texts.return_photo') }}" class="w-20 h-20 object-cover rounded-md">
                                 @else
-                                    Geen foto
+                                    {{ __('texts.no_photo') }}
                                 @endif
                             </td>
                         </tr>

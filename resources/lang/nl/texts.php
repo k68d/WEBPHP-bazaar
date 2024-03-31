@@ -148,4 +148,28 @@ return [
     'csv_overview' => 'Advertenties zijn ge-upload. Nu kunt u een afbeelding toevoegen aan elke advertentie.',
     'csv_entry' => 'Kies een afbeelding voor :title',
 
+    'post_new_ad' => 'Plaats een nieuwe advertentie',
+    'title' => 'Titel:',
+    'ad_type' => 'Type advertentie:',
+    'select_type' => 'Selecteer een type...',
+    'sale' => 'Verkoop',
+    'rent' => 'Verhuur',
+    'image' => 'Afbeelding:',
+    'place_ad' => 'Plaats Advertentie',
+
+    'my_rented_products' => 'Mijn Verhuurde Producten',
+    'product' => 'Product',
+    'start_rent' => 'Begin Huur',
+    'end_rent' => 'Eind Huur',
+    'return_photo' => 'Retour Foto',
+    'no_photo' => 'Geen foto',
+
+    'ads' => 'Advertenties',
+    'filter_by_title' => 'Filter op titel',
+    'title_asc' => 'Titel A-Z',
+    'title_desc' => 'Titel Z-A',
+    'price_low_high' => 'Prijs Laag-Hoog',
+    'price_high_low' => 'Prijs Hoog-Laag',
+    'no_ads_found' => 'Geen advertenties gevonden.',
+    'create' => 'Maak',
 ];

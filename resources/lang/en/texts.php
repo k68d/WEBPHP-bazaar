@@ -147,4 +147,29 @@ return [
     'csv_overview' => 'The advertisements have been uploaded. You are now adding an additional image to each advertisement.',
     'csv_entry' => 'Choose an Image for :title',
 
+    'post_new_ad' => 'Post a New Ad',
+    'title' => 'Title:',
+    'ad_type' => 'Type of Ad:',
+    'select_type' => 'Select a type...',
+    'sale' => 'Sale',
+    'rent' => 'Rent',
+    'image' => 'Image:',
+    'place_ad' => 'Place Ad',
+
+    'my_rented_products' => 'My Rented Products',
+    'product' => 'Product',
+    'start_rent' => 'Start of Rent',
+    'end_rent' => 'End of Rent',
+    'return_photo' => 'Return Photo',
+    'no_photo' => 'No photo',
+
+    'ads' => 'Advertisements',
+    'filter_by_title' => 'Filter by title',
+    'title_asc' => 'Title A-Z',
+    'title_desc' => 'Title Z-A',
+    'price_low_high' => 'Price Low-High',
+    'price_high_low' => 'Price High-Low',
+    'no_ads_found' => 'No advertisements found.',
+    'create' => 'Create',
+
 ];
