@@ -66,6 +66,9 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/contracts/create', [ContractController::class, 'create'])->name('contracts.create');
     Route::post('/contracts', [ContractController::class, 'store'])->name('contracts.store');
     Route::get('/contracts/{contract}/download', [ContractController::class, 'download'])->name('contracts.export');
+    Route::get('/contracts/{contract}/edit', [ContractController::class, 'edit'])->name('contracts.edit');
+    Route::put('/contracts/{contract}', [ContractController::class, 'update'])->middleware('auth')->name('contracts.update');
+    Route::delete('/contracts/{contract}', [ContractController::class, 'destroy'])->middleware('auth')->name('contracts.destroy');
 });
 
 Route::get('/contracts', [ContractController::class, 'index'])->middleware('auth')->name('contracts.index');

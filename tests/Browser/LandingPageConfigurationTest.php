@@ -11,9 +11,6 @@ use Tests\DuskTestCase;
 
 class LandingPageConfigurationTest extends DuskTestCase
 {
-    /**
-     * A Dusk test example.
-     */
     use DatabaseTruncation;
 
     public function testBusinessRoleAccessToLandingPageSettings()
@@ -24,7 +21,7 @@ class LandingPageConfigurationTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($businessUser, $nonBusinessUser) {
             $browser->loginAs($nonBusinessUser)
                 ->visit('/landingpage-settings/create')
-                ->assertSee('403 | Forbidden');
+                ->assertSee(__('texts.no_access'));
 
             $browser->loginAs($businessUser)
                 ->visit('/landingpage-settings/create')
@@ -47,7 +44,7 @@ class LandingPageConfigurationTest extends DuskTestCase
                 ->check('components[intro]')
                 ->type('intro[text]', 'This is an introduction text.')
                 ->check('components[highlighted_ads]')
-                ->press('Opslaan')
+                ->press(__('texts.save'))
                 ->assertPathIs('/landingpage-settings/create');
         });
 
@@ -65,11 +62,9 @@ class LandingPageConfigurationTest extends DuskTestCase
                 ->type('text_style[font]', 'Arial')
                 ->type('text_style[size]', '16')
                 ->check('components[highlighted_ads]')
-                ->press('Opslaan')
+                ->press(__('texts.save'))
                 ->assertPathIs('/dashboard');
         });
-
-
     }
 
     public function testContentEditingAndSaving()
@@ -77,30 +72,27 @@ class LandingPageConfigurationTest extends DuskTestCase
         $businessUser = User::factory()->create(['role_id' => Role::where('name', 'Business')->first()->id]);
 
         $this->browse(function (Browser $browser) use ($businessUser) {
-            // Bezoek de pagina om een nieuwe landingspagina-configuratie te maken
             $browser->loginAs($businessUser)
                 ->visit('/landingpage-settings/create')
                 ->type('page_url', 'unique-page-url')
                 ->check('components[intro]')
                 ->type('intro[text]', 'This is an introduction text.')
-                ->type('text_style[font]', 'Arial') // Verplicht veld
-                ->type('text_style[size]', '16') // Verplicht veld
-                ->press('Opslaan')
-                ->assertPathIs('/dashboard'); // Pas dit aan aan je daadwerkelijke logica
+                ->type('text_style[font]', 'Arial')
+                ->type('text_style[size]', '16')
+                ->press(__('texts.save'))
+                ->assertPathIs('/dashboard');
 
             $browser->visit('/landingpage/unique-page-url')
-                ->assertSee('This is an introduction text.');
-
-            $browser->visit('/landingpage-settings/edit') // Pas de URL aan op basis van hoe je de bewerkpagina bereikt
-                ->type('intro[text]', 'This is updated introduction text.') // Update de introductietekst
-                ->press('Update')
-                ->assertPathIs('/dashboard'); // Controle op succesvolle opslag
+                ->assertSee('This is an introduction text.')
+                ->visit('/landingpage-settings/edit')
+                ->type('intro[text]', 'This is updated introduction text.')
+                ->press(__('texts.update'))
+                ->assertPathIs('/dashboard');
 
             $browser->visit('/landingpage/unique-page-url')
                 ->assertSee('This is updated introduction text.');
         });
     }
-
 
     public function testCorrectDisplayOfConfiguredComponents()
     {
@@ -111,19 +103,17 @@ class LandingPageConfigurationTest extends DuskTestCase
             $browser->loginAs($businessUser)
                 ->visit('/landingpage-settings/create')
                 ->type('page_url', 'display-test-page')
-                ->type('text_style[font]', 'Arial') // Verplicht veld
-                ->type('text_style[size]', '16') // Verplicht veld
+                ->type('text_style[font]', 'Arial')
+                ->type('text_style[size]', '16')
                 ->check('components[highlighted_ads]')
                 ->type('palette[background]', '#000000')
                 ->type('palette[text]', '#ffffff')
                 ->type('palette[primary]', '#6c757d')
                 ->type('palette[secondary]', '#007bff')
                 ->type('palette[accent]', '#00FF00')
-
-                ->press('Opslaan')
+                ->press(__('texts.save'))
                 ->visit('/landingpage/display-test-page')
-                ->assertSee(__('highlighted adverisements'));
+                ->assertSee(__('texts.highlighted_ads'));
         });
     }
-
 }

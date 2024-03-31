@@ -9,6 +9,7 @@ use App\Models\Contract;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class ContractController extends Controller
 {
@@ -86,7 +87,7 @@ class ContractController extends Controller
 
     public function create()
     {
-        $users = User::all(); // Haal alle gebruikers op
+        $users = User::all();
         return view('contracts.create', compact('users'));
     }
 
@@ -104,6 +105,44 @@ class ContractController extends Controller
         Contract::create($validatedData);
 
         return redirect()->route('contracts.index')->with('success', 'Contract succesvol opgeslagen.');
+    }
+
+    public function edit($id)
+    {
+        $contract = Contract::findOrFail($id);
+        $users = User::all();
+        return view('contracts.edit', compact('contract', 'users'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $rules = [
+            'user_id_one' => 'required|different:user_id_two',
+            'user_id_two' => 'required|different:user_id_one',
+            'description' => 'required|string',
+            'contract_date' => 'required|date|after_or_equal:today',
+            'status' => 'required|string',
+            'additional_info' => 'nullable|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $contract = Contract::findOrFail($id);
+        $contract->update($request->all());
+
+        return redirect()->route('contracts.index')->with('success', 'Contract updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $contract = Contract::findOrFail($id);
+        $contract->delete();
+
+        return redirect()->route('contracts.index')->with('success', 'Contract deleted successfully.');
     }
 
 

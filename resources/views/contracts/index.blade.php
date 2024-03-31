@@ -41,6 +41,15 @@
                                         class="font-semibold">{{ $contract->userTwo->name ?? 'N/A' }}</span>
                                 </p>
                                 @if (Auth::user()->hasRole('Admin'))
+                                    <a href="{{ route('contracts.edit', $contract->id) }}"
+                                        class="inline-block mt-2 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors">{{ __('texts.edit') }}</a>
+                                    <form action="{{ route('contracts.destroy', $contract->id) }}" method="POST"
+                                        class="inline" onsubmit="return confirm('{{ __('texts.confirm_delete') }}');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" dusk="delete-contract-button-{{ $contract->id }}"
+                                            class="mt-2 px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">{{ __('texts.delete') }}</button>
+                                    </form>
                                     <a href="{{ route('contracts.export', $contract->id) }}" dusk="export-pdf-link"
                                         class="inline-block mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">{{ __('texts.export_pdf') }}</a>
                                 @endif
@@ -88,7 +97,16 @@
 
                                 </p>
                                 @if (Auth::user()->hasRole('Admin'))
-                                    <a href="{{ route('contracts.export', $contract->id) }}"
+                                    <a href="{{ route('contracts.edit', $contract->id) }}"
+                                        class="inline-block mt-2 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors">{{ __('texts.edit') }}</a>
+                                    <form action="{{ route('contracts.destroy', $contract->id) }}" method="POST"
+                                        class="inline" onsubmit="return confirm('{{ __('texts.confirm_delete') }}');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" dusk="delete-contract-button-{{ $contract->id }}"
+                                            class="mt-2 px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">{{ __('texts.delete') }}</button>
+                                    </form>
+                                    <a href="{{ route('contracts.export', $contract->id) }}" dusk="export-pdf-link"
                                         class="inline-block mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">{{ __('texts.export_pdf') }}</a>
                                 @endif
                             </div>

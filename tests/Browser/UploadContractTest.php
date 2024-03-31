@@ -17,6 +17,12 @@ class UploadContractTest extends DuskTestCase
      */
     use DatabaseTruncation;
     public $text = 'Dit is een test contract.';
+    public function setUp(): void
+    {
+        parent::setUp();
+        app()->setLocale('en');
+    }
+
 
     public function testAdminCanCreateContract()
     {
@@ -26,8 +32,9 @@ class UploadContractTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($adminUser, $user1, $user2) {
             $browser->loginAs($adminUser)
+                ->visit('/lang/en')
                 ->visit('/contracts/create')
-                ->assertSee('Maak een nieuw contract')
+                ->assertSee(__('texts.create_new_contract'))
                 ->select('user_id_one', $user1->id)
                 ->select('user_id_two', $user2->id)
                 ->type('description', "{$this->text}")
@@ -96,7 +103,7 @@ class UploadContractTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($adminUser, $user1, $user2) {
             $browser->loginAs($adminUser)
                 ->visit('/contracts/create')
-                ->assertSee('Maak een nieuw contract')
+                ->assertSee(__('texts.create_new_contract'))
                 ->select('user_id_one', $user1->id)
                 ->select('user_id_two', $user1->id)
                 ->type('description', 'Dit is een test contract.')
@@ -107,5 +114,43 @@ class UploadContractTest extends DuskTestCase
                 ->assertSee('The user id one field and user id two must be different.')
                 ->assertSee('The user id two field and user id one must be different.');
         });
+    }
+
+    public function testAdminCanEditContract()
+    {
+        $adminUser = User::where('name', 'Admin User')->first();
+        $contract = Contract::factory()->create();
+
+        $this->browse(function (Browser $browser) use ($adminUser, $contract) {
+            $browser->loginAs($adminUser)
+                ->visit("/contracts/{$contract->id}/edit")
+                ->assertSee(__('texts.edit_contract'))
+                ->type('description', 'Updated Description')
+                ->click('@update-contract-button')
+                ->pause(1000)
+                ->assertSee('Updated Description');
+        });
+
+        $this->assertDatabaseHas('contracts', ['description' => 'Updated Description']);
+    }
+
+    public function testAdminCanDeleteContract()
+    {
+        $adminUser = User::where('name', 'Admin User')->first();
+        $contract = Contract::factory()->create();
+
+        $this->browse(function (Browser $browser) use ($adminUser, $contract) {
+            $browser->loginAs($adminUser)
+                ->visit('/contracts')
+                ->assertSee($contract->description)
+                ->pause(100)
+                ->press('@delete-contract-button-' . $contract->id)
+                ->waitForDialog()
+                ->acceptDialog()
+                ->pause(100)
+                ->assertDontSee($contract->description);
+        });
+
+        $this->assertDatabaseMissing('contracts', ['id' => $contract->id]);
     }
 }
