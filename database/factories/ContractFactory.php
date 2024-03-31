@@ -20,7 +20,7 @@ class ContractFactory extends Factory
             'user_id_one' => $userOne->id,
             'user_id_two' => $userTwo->id,
             'description' => $this->faker->sentence,
-            'contract_date' => $this->faker->date,
+            'contract_date' => $this->faker->dateTimeBetween('now', '+5 year')->format('Y-m-d'),
             'status' => $this->faker->randomElement(['Concept', 'Actief', 'Voltooid']),
             'additional_info' => $this->faker->paragraph,
         ];

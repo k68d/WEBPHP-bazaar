@@ -135,4 +135,16 @@ return [
 
     'secure_area' => 'Dit is een beveiligd gebied van de applicatie. Bevestig je wachtwoord voordat je doorgaat.',
     'confirm' => 'Bevestigen',
+
+    'edit' => 'Bewerken',
+    'delete' => 'Verwijderen',
+    'confirm_delete' => 'Weet u zeker dat u dit contract wilt verwijderen?',
+    'update_contract' => 'Contract bijwerken',
+    'edit_contract' => 'Contract bewerken',
+
+    'upload_csv' => 'Upload Advertenties van CSV',
+    'upload' => 'Upload',
+    'csv_file' => 'CSV Bestand',
+    'csv_overview' => 'Advertenties zijn ge-upload. Nu kunt u een afbeelding toevoegen aan elke advertentie.',
+    'csv_entry' => 'Kies een afbeelding voor :title',
 ];

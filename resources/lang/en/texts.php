@@ -136,5 +136,14 @@ return [
 
     'secure_area' => 'This is a secure area of the application. Please confirm your password before continuing.',
     'confirm' => 'Confirm',
+
+    'edit' => 'Edit',
+    'confirm_delete' => 'Are you sure you want to delete this contract?',
+    'update_contract' => 'Update Contract',
+    'edit_contract' => 'Edit Contract',
+    'upload_csv' => 'Upload advertisements from CSV',
+    'upload' => 'Upload',
+    'csv_file' => 'CSV File',
+    'csv_overview' => 'The advertisements have been uploaded. You are now adding an additional image to each advertisement.',
+    'csv_entry' => 'Choose an Image for :title',
 ];
-// 'password' => 'Password:',

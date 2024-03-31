@@ -10,9 +10,13 @@ use Tests\DuskTestCase;
 
 class ExportContractTest extends DuskTestCase
 {
-
     use DatabaseTruncation;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        app()->setLocale('en');
+    }
 
     public function testAdminAccessToExportFunction()
     {
@@ -24,15 +28,14 @@ class ExportContractTest extends DuskTestCase
             $browser->loginAs($nonAdminUser)
                 ->visit('/contracts')
                 ->assertPathIs('/contracts')
-                ->assertDontSee('Exporteer PDF');
+                ->assertDontSee(__('texts.export_pdf'));
 
             $browser->loginAs($adminUser)
                 ->visit('/contracts')
                 ->assertPathIs('/contracts')
-                ->assertSee('Exporteer PDF');
+                ->assertSee(__('texts.export_pdf'));
         });
     }
-
 
     public function testExportFunctionalityForAdmin()
     {
@@ -43,8 +46,8 @@ class ExportContractTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($adminUser) {
             $browser->loginAs($adminUser)
                 ->visit('/contracts')
-                ->assertSee('Overzicht Contracten')
-                ->waitFor('@export-pdf-link')
+                ->assertSee(__('texts.contracts_overview'))
+                ->waitFor('@export-pdf-link') // Assuming you have a dusk selector named 'export-pdf-link'
                 ->click('@export-pdf-link')
                 ->assertPathIs('/contracts');
         });
@@ -61,4 +64,3 @@ class ExportContractTest extends DuskTestCase
         });
     }
 }
-

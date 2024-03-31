@@ -12,6 +12,12 @@ class BulkAdvertisementsUploadTest extends DuskTestCase
 {
     use DatabaseTruncation;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        app()->setLocale('en');
+    }
+
     /**
      * Test het uploaden van een CSV met advertenties en het toevoegen van afbeeldingen.
      */
@@ -27,12 +33,11 @@ class BulkAdvertisementsUploadTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user, $sampleCsvPath, $sampleImagePath) {
             $browser->loginAs($user)
                 ->visit('/advertenties/upload')
-                ->screenshot('bulk-advertisements-upload')
-                ->assertSee('Upload Advertenties CSV')
+                ->assertSee(__('texts.upload_csv'))
                 ->attach('csv_file', $sampleCsvPath)
                 ->press('@upload-csv-button')
                 ->waitForRoute('advertenties.upload.overview', [], 7)
-                ->assertSee('The advertisements have been uploaded.');
+                ->assertSee(__('texts.csv_overview'));
 
             $advertentieIds = $browser->script('return Array.from(document.querySelectorAll("[dusk^=afbeelding-]")).map(function(el) { return el.getAttribute("data-id"); });')[0];
 
@@ -45,7 +50,5 @@ class BulkAdvertisementsUploadTest extends DuskTestCase
                 ->waitForRoute('advertenties.index', [], 7)
                 ->assertPathIs('/advertenties');
         });
-
     }
-
 }

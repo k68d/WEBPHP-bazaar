@@ -42,7 +42,7 @@ class ApiAccessTest extends TestCase
         $this->actingAs($businessUser, 'sanctum')->get('/api/generateToken');
 
         $response = $this->actingAs($businessUser, 'sanctum')->getJson('/api/advertenties');
-        $response->assertOk()->assertJsonCount(2); // Verifieer dat er 2 advertenties zijn geretourneerd in de JSON response.
+        $response->assertOk()->assertJsonCount(2);
     }
 
     /**
