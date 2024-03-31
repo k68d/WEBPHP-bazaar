@@ -13,6 +13,10 @@ class Advertisement extends Model
     protected $keyType = 'string'; // Geef aan dat de sleuteltype een string is.
     public $incrementing = false; // Geen auto-increment.
     protected $fillable = ['title', 'description', 'price', 'type', 'image_path', 'user_id', 'begin_huur', 'eind_huur', 'return_photo_path', 'renter_id'];
+    protected $casts = [
+        'begin_huur' => 'datetime',
+        'eind_huur' => 'datetime',
+    ];
     
     protected static function boot()
     {

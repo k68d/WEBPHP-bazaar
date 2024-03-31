@@ -8,6 +8,15 @@
 </head>
 <body>
     @include('layouts.navbar')
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     <div class="container mx-auto px-4">
         <h1 class="text-2xl font-bold mt-5">{{ $advertentie->title }}</h1>
         @if ($advertentie->image_path)

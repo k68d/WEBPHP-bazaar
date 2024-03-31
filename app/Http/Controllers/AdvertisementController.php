@@ -111,13 +111,24 @@ class AdvertisementController extends Controller
     public function rentalOverview()
     {
         $user = Auth::user();
-        $rentals = Advertisement::where('renter_id', $user->id)
+        $rentals = Advertisement::where('user_id', $user->id)
                                 ->whereNotNull('begin_huur')
                                 ->whereNotNull('eind_huur')
                                 ->orderBy('begin_huur', 'desc')
                                 ->get();
 
         return view('advertenties.rentaloverview', compact('rentals'));          
+    }
+
+    public function rentedOverview()
+    {
+        $rentals = Advertisement::where('renter_id', Auth::id())
+                            ->whereNotNull('begin_huur')
+                            ->whereNotNull('eind_huur')
+                            ->orderBy('begin_huur', 'desc')
+                            ->get();
+
+        return view('advertenties.rentedOverview', compact('rentals'));
     }
 
     public function purchase($advertisementId)
@@ -139,7 +150,6 @@ class AdvertisementController extends Controller
 
     public function rent(Request $request, $advertisementId)
     {
-        
         $advertisement = Advertisement::findOrFail($advertisementId);
         $user = $advertisement->user;
 
@@ -150,7 +160,6 @@ class AdvertisementController extends Controller
         $request->validate([
             'begin_huur' => 'required|date|after_or_equal:today',
             'eind_huur' => 'required|date|after:begin_huur',
-            'renter_id' => 'required',
         ]);
 
         $beginHuur = Carbon::parse($request->begin_huur);

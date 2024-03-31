@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use App\Models\Advertentie;
-use App\Models\Advertisement;
+use App\Models\User;
+
 
 class ProfileController extends Controller
 {
@@ -41,9 +41,10 @@ class ProfileController extends Controller
 
     public function history(Request $request): View
     {
+        $advertiser = $request->user();
         $advertenties = $request->user()->purchasedAdvertisements()->get();
 
-        return view('profile.history', compact('advertenties'));
+        return view('profile.history', compact('advertenties', 'advertiser'));
     }
 
     /**
