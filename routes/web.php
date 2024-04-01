@@ -12,6 +12,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\AdvertiserReviewController;
+use App\Models\Advertisement;
 
 // Homge Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -41,6 +42,8 @@ Route::get('/advertentie/my-rentals', [AdvertisementController::class, 'rentedOv
 Route::post('/advertisement/{advertisement}/return', [AdvertisementController::class, 'returnProduct'])->middleware('auth')->name('advertisement.return');
 Route::post('/advertisements/{advertisement}/reviews', [ProductReviewController::class, 'store'])->name('product.reviews.store');
 Route::post('/advertiser/{advertiser}/reviews', [AdvertiserReviewController::class, 'store'])->name('advertiser.reviews.store');
+Route::post('/advertenties/{id}/highlight', [AdvertisementController::class, 'highlightAd'])->name('highlighted_ads.store');
+Route::delete('/advertenties/{id}/remove-highlight', [AdvertisementController::class, 'removeHighlight'])->name('highlighted_ads.remove');
 
 // Authentication Pages
 Route::get('/login', function () {

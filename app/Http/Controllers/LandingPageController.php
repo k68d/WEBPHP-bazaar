@@ -136,7 +136,13 @@ class LandingPageController extends Controller
 
     protected function getHighlightedAdsData()
     {
-        return Advertisement::where('user_id', Auth::id())->get(); //TODO
+        if (Auth::check()) {
+            // Haal de uitgelichte advertenties op van de ingelogde gebruiker
+            $highlightedAds = Auth::user()->highlightedAds()->get();
+            return $highlightedAds;
+        }
+    
+        return collect();
     }
 
     protected function prepareComponentsData(Request $request)

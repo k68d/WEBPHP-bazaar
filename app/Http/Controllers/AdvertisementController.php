@@ -43,6 +43,20 @@ class AdvertisementController extends Controller
         return view('advertenties.index', compact('advertenties'));
     }
 
+    public function highlightAd(Request $request, $advertisementId)
+    {
+        $user = $request->user();
+        $user->highlightedAds()->attach($advertisementId);
+        return back()->with('success', 'Advertentie succesvol gehighlight.');
+    }
+
+    public function removeHighlight(Request $request, $advertisementId)
+    {
+        $user = $request->user();
+        $user->highlightedAds()->detach($advertisementId);
+        return back()->with('success', 'Highlight van advertentie succesvol verwijderd.');
+    }
+
 
     public function show(Request $request, $id)
     {
@@ -55,13 +69,24 @@ class AdvertisementController extends Controller
             $isFavorite = $user->favorites()->where('advertisement_id', $advertentie->id)->exists();
         }
 
-        return view('advertenties.show', compact('advertentie', 'qrCode', 'isFavorite'));
+        $isHighlighted = false;
+        if ($user) {
+            $isHighlighted = $user->highlightedAds()->where('advertisement_id', $advertentie->id)->exists();
+        }
+
+        $linkedAd = null;
+        if ($advertentie->link_ad) {
+            $linkedAd = Advertisement::find($advertentie->link_ad);
+        }
+
+        return view('advertenties.show', compact('advertentie', 'qrCode', 'isFavorite', 'linkedAd', 'isHighlighted'));
     }
 
 
     public function create()
     {
-        return view('advertenties.create');
+        $otherAds = Advertisement::where('user_id', '!=', auth()->id())->get(); 
+        return view('advertenties.create', compact('otherAds'));
     }
 
     public function store(Request $request)
@@ -74,6 +99,7 @@ class AdvertisementController extends Controller
             'image' => 'image|nullable',
             'begin_huur' => 'nullable|date',
             'eind_huur' => 'nullable|date',
+            'link_ad' => 'nullable|uuid|exists:advertisements,id',
         ]);
 
         $path = $request->file('image') ? $request->file('image')->store('afbeeldingen', 'public') : null;
@@ -90,16 +116,6 @@ class AdvertisementController extends Controller
         ]);
 
         return redirect()->route('advertenties.index')->with('success', 'Advertentie succesvol aangemaakt!');
-    }
-
-    public function edit()
-    {
-
-    }
-
-    public function update(Request $request)
-    {
-
     }
 
     public function rentalOverview()
@@ -174,6 +190,8 @@ class AdvertisementController extends Controller
             'renter_id' => Auth::id(),
             'begin_huur' => $beginHuur,
             'eind_huur' => $eindHuur,
+            'return_photo_path' => null,
+            'wear_level' => null,
         ]);
 
         $user->purchasedAdvertisements()->attach($advertisement);
@@ -183,7 +201,8 @@ class AdvertisementController extends Controller
     public function returnProduct(Request $request, $advertisementId)
     {
         $request->validate([
-            'return_photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'return_photo' => 'required|image',
+            'wear_level' => 'required|string',
         ]);
 
         $user = Auth::user();
@@ -200,6 +219,7 @@ class AdvertisementController extends Controller
             'begin_huur' => null,
             'eind_huur' => null,
             'renter_id' => null,
+            'wear_level' => $request->wear_level,
         ]);
 
         return redirect()->route('advertisements.index')->with('success', 'Advertentie succesvol geretourneerd.');

@@ -12,10 +12,11 @@ class Advertisement extends Model
 
     protected $keyType = 'string'; // Geef aan dat de sleuteltype een string is.
     public $incrementing = false; // Geen auto-increment.
-    protected $fillable = ['title', 'description', 'price', 'type', 'image_path', 'user_id', 'begin_huur', 'eind_huur', 'return_photo_path', 'renter_id'];
+    protected $fillable = ['title', 'description', 'price', 'type', 'image_path', 'user_id', 'einddatum', 'begin_huur', 'eind_huur', 'return_photo_path', 'renter_id', 'wear_level', 'link_ad'];
     protected $casts = [
         'begin_huur' => 'datetime',
         'eind_huur' => 'datetime',
+        'einddatum' => 'datetime',
     ];
     
     protected static function boot()
@@ -23,6 +24,10 @@ class Advertisement extends Model
         parent::boot();    
         static::creating(function ($model) {
             $model->{$model->getKeyName()} = (string) Str::uuid();
+        });
+
+        static::creating(function ($advertisement) {
+            $advertisement->einddatum = now()->addWeek();
         });
     }
 
@@ -49,5 +54,10 @@ class Advertisement extends Model
     public function reviews()
     {
         return $this->hasMany(ProductReview::class);
+    }
+
+    public function highlightedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'highlighted_ads', 'advertisement_id', 'user_id')->withTimestamps();
     }
 }

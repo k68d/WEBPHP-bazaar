@@ -1,5 +1,17 @@
 <x-app-layout>
     <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+        @if($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Whoops!</strong>
+                <span class="block sm:inline">Er zijn problemen met je input.</span>
+                <ul class="list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         @if($advertenties->isEmpty())
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mt-5">
                 Je hebt nog niks gekocht of gehuurd.
@@ -39,10 +51,16 @@
                         @if ($advertentie->type === 'Verhuur' && $advertentie->renter_id == auth()->id())
                             @if ($advertentie->eind_huur && now()->lessThan($advertentie->eind_huur))
                                 @if (empty($advertentie->return_photo_path))
-                                    {{-- Foto upload formulier --}}
                                     <form action="{{ route('advertisement.return', $advertentie->id) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <input type="file" name="return_photo" required>
+                                        <select name="wear_level" required>
+                                            <option value="">Selecteer slijtage niveau...</option>
+                                            <option value="Geen">Geen</option>
+                                            <option value="Licht">Licht</option>
+                                            <option value="Matig">Matig</option>
+                                            <option value="Zwaar">Zwaar</option>
+                                        </select>
                                         <button type="submit">Foto Uploaden</button>
                                     </form>
                                 @else

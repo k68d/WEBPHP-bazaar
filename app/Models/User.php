@@ -69,6 +69,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function highlightedAds()
+    {
+        return $this->belongsToMany(Advertisement::class, 'highlighted_ads', 'user_id', 'advertisement_id')->withTimestamps();
+    }
+
     public function hasRole($roles)
     {
         if (is_array($roles)) {

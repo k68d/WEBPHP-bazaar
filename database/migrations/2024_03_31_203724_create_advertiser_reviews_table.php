@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('advertiser_reviews', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('advertiser_id'); // Referentie naar de gebruiker die de adverteerder is
-            $table->unsignedBigInteger('reviewer_id'); // Referentie naar de gebruiker die de review plaatst
+            $table->unsignedBigInteger('advertiser_id'); 
+            $table->unsignedBigInteger('reviewer_id'); 
             $table->text('review');
-            $table->unsignedTinyInteger('rating'); // Bijvoorbeeld, een score van 1 tot 5
+            $table->unsignedTinyInteger('rating'); 
             $table->timestamps();
         
             $table->foreign('advertiser_id')->references('id')->on('users')->onDelete('cascade');

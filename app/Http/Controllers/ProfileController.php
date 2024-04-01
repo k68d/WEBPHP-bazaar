@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use App\Models\User;
+use App\Models\Advertisement;
 
 
 class ProfileController extends Controller
@@ -39,10 +39,13 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    public function history(Request $request): View
+    public function history(Request $request)
     {
         $advertiser = $request->user();
-        $advertenties = $request->user()->purchasedAdvertisements()->get();
+
+        $purchasedAdvertisements = $advertiser->purchasedAdvertisements()->get();
+        $rentedAdvertisements = Advertisement::where('renter_id', $advertiser->id)->get();
+        $advertenties = $purchasedAdvertisements->merge($rentedAdvertisements);
 
         return view('profile.history', compact('advertenties', 'advertiser'));
     }
