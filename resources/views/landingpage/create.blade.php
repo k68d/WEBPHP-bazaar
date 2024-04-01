@@ -7,9 +7,9 @@
                     <!-- URL Field -->
                     <div class="mb-4">
                         <label for="page_url"
-                            class="block text-gray-700 text-sm font-bold mb-2">{{ __('texts.page_url') }}</label>
+                            class="block text-white text-sm font-bold mb-2">{{ __('texts.page_url') }}</label>
                         <input type="text" name="page_url" id="page_url" value="{{ old('page_url') }}"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline">
                         @error('page_url')
                             <p class="text-red-500 text-xs italic">{{ $message }}</p>
                         @enderror
@@ -17,7 +17,7 @@
 
                     <!-- Color Palette Fields -->
                     <div class="mb-4">
-                        <div class="block text-gray-700 text-sm font-bold mb-2">{{ __('texts.color_palette') }}</div>
+                        <div class="block text-white text-sm font-bold mb-2">{{ __('texts.color_palette') }}</div>
                         <div class="flex flex-wrap -mx-2">
                             <!-- Background Color -->
                             <div class="px-2 w-1/2 md:w-1/4">
@@ -89,35 +89,35 @@
                     <!-- Text Style Fields -->
                     <div class="mb-4">
                         <label for="text_style_font"
-                            class="block text-gray-700 text-sm font-bold mb-2">{{ __('texts.lettertype') }}</label>
+                            class="block text-white text-sm font-bold mb-2">{{ __('texts.lettertype') }}</label>
                         <input type="text" name="text_style[font]" id="text_style_font"
                             placeholder="{{ __('texts.lettertype') }}"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
                             value="{{ old('text_style.font') }}" required>
 
                         <label for="text_style_size"
-                            class="block text-gray-700 text-sm font-bold mb-2 mt-4">{{ __('texts.lettergrootte') }}</label>
+                            class="block text-white text-sm font-bold mb-2 mt-4">{{ __('texts.lettergrootte') }}</label>
                         <input type="number" name="text_style[size]" id="text_style_size"
                             placeholder="{{ __('texts.lettergrootte') }}"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
                             value="{{ old('text_style.size') }}" required>
                     </div>
 
                     <!-- Components Selection and Settings -->
                     <div class="mb-4">
                         <label
-                            class="block text-gray-700 text-sm font-bold mb-2">{{ __('texts.select_components') }}</label>
+                            class="block text-white text-sm font-bold mb-2">{{ __('texts.select_components') }}</label>
 
                         <!-- Hero Component Choice -->
                         <div>
                             <input type="checkbox" name="components[hero]" id="components_hero"
                                 {{ old('components.hero') ? 'checked' : '' }} class="mr-2">
-                            <label for="components_hero">{{ __('texts.hero') }}</label>
+                            <label for="components_hero" class="mb-2 text-white">{{ __('texts.hero') }}</label>
                             <div id="hero_details" style="{{ old('components.hero') ? '' : 'display:none;' }}">
                                 <!-- Hero Template Choice -->
                                 <div class="mb-2">
                                     <label for="hero_template"
-                                        class="block text-gray-700 text-sm font-bold mb-1">{{ __('texts.hero_template') }}</label>
+                                        class="block text-white text-sm font-bold mb-1">{{ __('texts.hero_template') }}</label>
                                     <select name="hero[template]" id="hero_template"
                                         class="block appearance-none w-full p-2 border rounded leading-tight focus:outline-none focus:shadow-outline">
                                         <option value="1">{{ __('texts.template_1_full_width_bg') }}</option>
@@ -131,7 +131,7 @@
                                 <!-- Main Title -->
                                 <div class="mb-2">
                                     <label for="hero_title"
-                                        class="block text-gray-700 text-sm font-bold mb-1">{{ __('texts.main_title') }}</label>
+                                        class="block text-white text-sm font-bold mb-1">{{ __('texts.main_title') }}</label>
                                     <input type="text" name="hero[title]" id="hero_title"
                                         placeholder="{{ __('texts.main_title') }}" value="{{ old('hero.title') }}"
                                         class="block w-full p-2 border rounded leading-tight focus:outline-none focus:shadow-outline">
@@ -140,7 +140,7 @@
                                 <!-- Secondary Title -->
                                 <div class="mb-2">
                                     <label for="hero_secondaryTitle"
-                                        class="block text-gray-700 text-sm font-bold mb-1">{{ __('texts.secondary_title') }}</label>
+                                        class="block text-white text-sm font-bold mb-1">{{ __('texts.secondary_title') }}</label>
                                     <input type="text" name="hero[secondaryTitle]" id="hero_secondaryTitle"
                                         placeholder="{{ __('texts.secondary_title') }}"
                                         value="{{ old('hero.secondaryTitle') }}"
@@ -150,8 +150,8 @@
                                 <!-- Image URL Explanation -->
                                 <div class="mb-4">
                                     <label for="hero_image"
-                                        class="block text-gray-700 text-sm font-bold mb-1">{{ __('texts.image_url') }}</label>
-                                    <p class="text-sm text-gray-600 mb-1">{{ __('texts.image_url_help') }}</p>
+                                        class="block text-white text-sm font-bold mb-1">{{ __('texts.image_url') }}</label>
+                                    <p class="text-sm text-white mb-1">{{ __('texts.image_url_help') }}</p>
                                     <input type="url" name="hero[image]" id="hero_image"
                                         placeholder="https://example.com/image.jpg" value="{{ old('hero.image') }}"
                                         class="block w-full p-2 border rounded leading-tight focus:outline-none focus:shadow-outline">
@@ -169,7 +169,8 @@
                         <div>
                             <input type="checkbox" name="components[intro]" id="components_intro"
                                 {{ old('components.intro') ? 'checked' : '' }} class="mr-2">
-                            <label for="components_intro">{{ __('texts.introduction') }}</label>
+                            <label for="components_intro"
+                                class="mb-2 text-white">{{ __('texts.introduction') }}</label>
                             <div id="intro_details" style="{{ old('components.intro') ? '' : 'display:none;' }}">
                                 <textarea name="intro[text]" placeholder="{{ __('texts.introduction_text') }}" class="block w-full mb-2"></textarea>
                             </div>
@@ -179,7 +180,8 @@
                         <div>
                             <input type="checkbox" name="components[highlighted_ads]" id="components_highlighted_ads"
                                 {{ old('components.highlighted_ads') ? 'checked' : '' }} class="mr-2">
-                            <label for="components_highlighted_ads">{{ __('texts.featured_ads') }}</label>
+                            <label for="components_highlighted_ads"
+                                class="mb-2 text-white">{{ __('texts.featured_ads') }}</label>
                         </div>
                     </div>
 
