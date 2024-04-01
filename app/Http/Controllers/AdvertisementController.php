@@ -179,6 +179,11 @@ class AdvertisementController extends Controller
             return back()->with('error', 'Deze advertentie kan niet gehuurd worden.');
         }
 
+        $currentRentals = $user->rentedAdvertisements()->count();
+        if ($currentRentals >= 4) {
+            return back()->with('error', 'Je hebt al het maximum aantal van 4 artikelen gehuurd.');
+        }
+
         $request->validate([
             'begin_huur' => 'required|date|after_or_equal:today',
             'eind_huur' => 'required|date|after:begin_huur',

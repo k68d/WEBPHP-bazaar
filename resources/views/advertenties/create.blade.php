@@ -1,4 +1,13 @@
 <x-app-layout>
+@if ($errors->any())
+    <div class="mb-5 p-4 bg-red-100 text-red-600 border border-red-400 rounded">
+        <ul class="list-disc list-inside">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     <form method="POST" action="{{ route('advertenties.store') }}" enctype="multipart/form-data"
         class="max-w-xl mx-auto py-8 px-4 space-y-6 bg-white shadow-md rounded-lg mt-4">
         @csrf

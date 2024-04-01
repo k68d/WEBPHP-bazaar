@@ -10,8 +10,10 @@ class Advertisement extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string'; // Geef aan dat de sleuteltype een string is.
-    public $incrementing = false; // Geen auto-increment.
+    protected $keyType = 'string';
+    
+    public $incrementing = false; 
+
     protected $fillable = ['title', 'description', 'price', 'type', 'image_path', 'user_id', 'einddatum', 'begin_huur', 'eind_huur', 'return_photo_path', 'renter_id', 'wear_level', 'link_ad'];
     protected $casts = [
         'begin_huur' => 'datetime',

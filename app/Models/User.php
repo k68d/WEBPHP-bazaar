@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -34,11 +35,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -52,6 +48,11 @@ class User extends Authenticatable
     public function purchasedAdvertisements()
     {
         return $this->belongsToMany(Advertisement::class, 'sale_history', 'user_id', 'advertisement_id')->withTimestamps();
+    }
+
+    public function rentedAdvertisements()
+    {
+        return $this->hasMany(Advertisement::class, 'renter_id');
     }
 
     public function favorites()

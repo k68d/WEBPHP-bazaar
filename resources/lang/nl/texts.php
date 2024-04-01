@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'welcome' => 'Welkom bij de Bazaar shop! Hier vind je alle producten die je nodig hebt. Bekijk de nieuwste advertenties hieronder.',
     'create_new_contract' => 'Maak een nieuw contract',
     'user_1' => 'Gebruiker 1',
     'user_2' => 'Gebruiker 2',

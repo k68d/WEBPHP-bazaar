@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'welcome' => 'Welcome to the Bazaar shop. Here you can find all the products you need. See the latest advertisements below.',
+    
     'create_new_contract' => 'Create a new contract',
     'user_1' => 'User 1',
     'user_2' => 'User 2',
