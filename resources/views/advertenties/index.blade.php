@@ -37,8 +37,10 @@
                                 <div>
                                     <a href="{{ route('advertenties.show', $advertentie) }}"
                                         class="text-blue-600 hover:text-blue-700">{{ __('texts.view') }}</a>
-                                    <a href="{{ route('advertenties.edit', $advertentie) }}"
-                                        class="ml-2 text-blue-600 hover:text-blue-700">{{ __('texts.edit') }}</a> TODO
+                                    @if (auth()->user()->id === $advertentie->user_id)
+                                        <a href="{{ route('advertenties.edit', $advertentie) }}"
+                                            class="ml-2 text-blue-600 hover:text-blue-700">{{ __('texts.edit') }}</a>
+                                    @endif
                                 </div>
                                 <span class="text-sm text-gray-900">€{{ $advertentie->price }}</span>
                             </div>

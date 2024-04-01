@@ -18,49 +18,59 @@
         @endif
 
         <div class="text-lg space-y-2">
-            <p><span class="font-semibold text-gray-900">Beschrijving:</span> {{ $advertentie->description }}</p>
-            <p><span class="font-semibold text-gray-900">Prijs:</span>
+            <p><span class="font-semibold text-gray-900">{{ __('texts.description') }}:</span>
+                {{ $advertentie->description }}</p>
+            <p><span class="font-semibold text-gray-900">{{ __('texts.price') }}:</span>
                 €{{ number_format($advertentie->price, 2, ',', '.') }}</p>
-            <p><span class="font-semibold text-gray-900">Type:</span> {{ $advertentie->type }}</p>
-            <p><span class="font-semibold text-gray-900">Slijtageniveau:</span>
-                {{ $advertentie->wear_level ?? 'Niet gespecificeerd' }}</p>
-            {!! $qrCode ?? '' !!}
+            <p><span class="font-semibold text-gray-900">{{ __('texts.type') }}:</span> {{ $advertentie->type }}</p>
+            <p><span class="font-semibold text-gray-900">{{ __('texts.rental_wear_level') }}:</span>
+                {{ $advertentie->wear_level ?? __('texts.not_specified') }}</p>
+            @isset($qrCode)
+                <div class="qr-code">
+                    {!! $qrCode !!}
+                </div>
+            @endisset
         </div>
 
         <div class="mt-6 space-y-4">
             @if (auth()->user()->id !== $advertentie->user_id)
-                @if ($advertentie->type === 'Verkoop')
+                @if ($advertentie->type === __('texts.sale'))
                     <div>
                         @if ($advertentie->purchasers->count() > 0)
                             <span
-                                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">Verkocht</span>
+                                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">{{ __('texts.sold') }}</span>
                         @else
                             <form action="{{ route('advertisement.purchase', $advertentie->id) }}" method="POST"
                                 class="inline">
                                 @csrf
                                 <button type="submit"
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Koop</button>
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">{{ __('texts.buy') }}</button>
                             </form>
                         @endif
                     </div>
-                @elseif ($advertentie->type === 'Verhuur')
-                    <form action="{{ route('advertisement.rent', $advertentie->id) }}" method="POST" class="space-y-4">
+                @elseif ($advertentie->type === __('texts.rental'))
+                    <form action="{{ route('advertisement.rent', $advertentie->id) }}" method="POST"
+                        class="space-y-4">
                         @csrf
                         <div>
-                            <label for="begin_huur" class="block text-sm font-medium text-gray-700">Begin Huur</label>
+                            <label for="begin_huur"
+                                class="block text-sm font-medium text-gray-700">{{ __('texts.start_rent') }}</label>
                             <input type="date" id="begin_huur" name="begin_huur" required
                                 class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                         </div>
                         <div>
-                            <label for="eind_huur" class="block text-sm font-medium text-gray-700">Eind Huur</label>
+                            <label for="eind_huur"
+                                class="block text-sm font-medium text-gray-700">{{ __('texts.end_rent') }}</label>
                             <input type="date" id="eind_huur" name="eind_huur" required
                                 class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                         </div>
                         <button type="submit"
-                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Huur</button>
+                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">{{ __('texts.rent') }}</button>
                     </form>
                 @endif
             @endif
+
+
 
             <div class="flex gap-4">
                 @if ($isFavorite)
@@ -68,27 +78,28 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit"
-                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Verwijderen van
-                            Favorieten</button>
+                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            {{ __('texts.remove_from_favorites') }}
+                        </button>
                     </form>
                 @else
                     <form action="{{ route('profile.addfavorite', $advertentie->id) }}" method="POST">
                         @csrf
                         <button type="submit"
-                            class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">Toevoegen
-                            aan Favorieten</button>
+                            class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
+                            {{ __('texts.add_to_favorites') }}
+                        </button>
                     </form>
                 @endif
                 @if (auth()->user()->id === $advertentie->user_id)
                     <form action="{{ route('highlighted_ads.store', $advertentie->id) }}" method="POST">
                         @csrf
                         <button type="submit"
-                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Licht
-                            advertensie
-                            aan</button>
+                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            {{ __('texts.highlight_ad') }}
+                        </button>
                     </form>
                 @endif
             </div>
         </div>
-    </div>
 </x-app-layout>

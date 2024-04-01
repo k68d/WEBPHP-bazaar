@@ -12,12 +12,17 @@ use Tests\DuskTestCase;
 class LandingPageConfigurationTest extends DuskTestCase
 {
     use DatabaseTruncation;
-
+    public function setUp(): void
+    {
+        parent::setUp();
+        app()->setLocale('en');
+    }
     public function testBusinessRoleAccessToLandingPageSettings()
     {
         $businessUser = User::factory()->create(['role_id' => Role::where('name', 'Business')->first()->id]);
-        $nonBusinessUser = User::factory()->create(['role_id' => Role::where('name', '!=', 'Business')->first()->id]);
-
+        $nonBusinessUser = User::factory()->create([
+            'role_id' => Role::whereNotIn('name', ['Business', 'Admin'])->first()->id
+        ]);
         $this->browse(function (Browser $browser) use ($businessUser, $nonBusinessUser) {
             $browser->loginAs($nonBusinessUser)
                 ->visit('/landingpage-settings/create')

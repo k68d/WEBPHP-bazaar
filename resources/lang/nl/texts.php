@@ -172,4 +172,26 @@ return [
     'price_high_low' => 'Prijs Hoog-Laag',
     'no_ads_found' => 'Geen advertenties gevonden.',
     'create' => 'Maak',
+
+    'advertisements' => 'Advertenties',
+    'contracts' => 'Contracten',
+    'landingpage' => 'Landing Pagina',
+    'agenda' => 'Agenda',
+    'myRentals' => 'Mijn Verhuurde Producten',
+    'rented' => 'Gehuurde Producten',
+    'upload_all' => 'Upload CSV',
+    'create_advertisement' => 'Maak Advertentie',
+    'no_rented_products' => 'Je hebt nog geen producten verhuurd.',
+    'product_expiry' => 'Afloop Advertentie',
+
+    'rental_wear_level' => 'Slijtageniveau:',
+    'not_specified' => 'Niet gespecificeerd',
+    'sold' => 'Verkocht',
+    'buy' => 'Koop',
+    'begin_rent' => 'Begin Huur',
+    'remove_from_favorites' => 'Verwijderen van Favorieten',
+    'add_to_favorites' => 'Toevoegen aan Favorieten',
+    'highlight_ad' => 'Licht advertensie aan',
+    'rental' => 'Verhuur',
+
 ];

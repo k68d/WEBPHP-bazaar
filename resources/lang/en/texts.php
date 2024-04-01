@@ -172,4 +172,26 @@ return [
     'no_ads_found' => 'No advertisements found.',
     'create' => 'Create',
 
+    'advertisements' => 'Advertisements',
+
+    'contracts' => 'Contracts',
+    'landingpage' => 'Landing Page',
+    'agenda' => 'Agenda',
+    'myRentals' => 'My Rentals',
+    'rented' => 'Rented',
+    'upload_all' => 'Upload CSV',
+    'create_advertisement' => 'Create Advertisement',
+    'no_rented_products' => 'You have not rented out any products yet.',
+    'product_expiry' => 'Ad Expiry',
+
+    'rental_wear_level' => 'Wear Level:',
+    'not_specified' => 'Not Specified',
+    'sold' => 'Sold',
+    'buy' => 'Buy',
+    'begin_rent' => 'Start Rent',
+    'remove_from_favorites' => 'Remove from Favorites',
+    'add_to_favorites' => 'Add to Favorites',
+    'highlight_ad' => 'Highlight Ad',
+    'rental' => 'Rental',
+
 ];

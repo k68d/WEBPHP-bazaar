@@ -14,9 +14,72 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('texts.dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('advertisements.index')" :active="request()->routeIs('advertisements.index')">
+                        {{ __('texts.advertisements') }}
+                    </x-nav-link>
+
+                    @auth
+                        @if (auth()->user()->hasRole('Admin') || auth()->user()->hasRole('Business'))
+                            <x-nav-link :href="route('contracts.index')" :active="request()->routeIs('contracts.index')">
+                                {{ __('texts.contracts') }}
+                            </x-nav-link>
+                        @endif
+
+                        @if (auth()->user()->hasRole('Business'))
+                            @php
+                                $pageSettingExists = \App\Models\PageSetting::where(
+                                    'user_id',
+                                    auth()->user()->id,
+                                )->exists();
+                                $routeName = $pageSettingExists
+                                    ? 'landingpage-settings.edit'
+                                    : 'landingpage-settings.create';
+                            @endphp
+
+                            <x-nav-link :href="route($routeName)" :active="request()->routeIs('landingpage-settings.*')">
+                                {{ $pageSettingExists ? __('texts.landingpage') : __('texts.landingpage') }}
+                            </x-nav-link>
+                        @endif
+
+
+                        <div class="relative hidden sm:flex sm:items-center sm:ml-6">
+                            <div x-data="{ open: false }" @click.away="open = false">
+                                <button @click="open = !open"
+                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                    {{ __('texts.agenda') }}
+                                    <svg class="ml-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+
+                                <div x-show="open"
+                                    class="absolute z-50 mt-2 rounded-md shadow-lg origin-top-right right-0 w-48 py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                    @click="open = false">
+                                    <a href="{{ route('advertisement.myRentals') }}"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                        :class="{ 'bg-gray-100': request() - > routeIs('advertisement.myRentals') }">
+                                        {{ __('texts.myRentals') }}
+                                    </a>
+                                    @if (!auth()->user()->hasRole('Standard'))
+                                        <a href="{{ route('advertisement.rentals') }}"
+                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            :class="{ 'bg-gray-100': request() - > routeIs('advertisement.rentals') }">
+                                            {{ __('texts.rented') }}
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                    @endauth
                 </div>
+
+
             </div>
 
             @if (Auth::check())
