@@ -1,5 +1,5 @@
 <x-app-layout>
-    <h1>{{ __('texts.ads') }}</h1>
+    <h1 class="text-3xl font-bold text-center text-white mt-6 mb-4">{{ __('texts.ads') }}</h1>
     <div class="container mx-auto mb-4">
         <div class="flex flex-wrap -mx-3">
             <div class="w-full px-3">
@@ -36,7 +36,7 @@
                             <div class="flex justify-between items-center mt-4">
                                 <div>
                                     <a href="{{ route('advertenties.show', $advertentie) }}"
-                                        class="text-blue-600 hover:text-blue-700">{{ __('texts.view') }}</a> TODO
+                                        class="text-blue-600 hover:text-blue-700">{{ __('texts.view') }}</a>
                                     <a href="{{ route('advertenties.edit', $advertentie) }}"
                                         class="ml-2 text-blue-600 hover:text-blue-700">{{ __('texts.edit') }}</a> TODO
                                 </div>
@@ -52,19 +52,36 @@
 
 
     </div>
-    @if ($advertenties->count())
-        <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-                {{ $advertenties->links() }}
+    <!-- Container to Match Main Content Area -->
+    <div class="container mx-auto mb-4 px-4">
+        <!-- Pagination, conditionally displayed -->
+        @if ($advertenties->count())
+            <div class="flex justify-center mt-4">
+                {{ $advertenties->links() }} <!-- Tailwind-styled pagination -->
             </div>
-        </div>
-    @else
-        <p>{{ __('texts.no_ads_found') }}</p>
-    @endif
-    <a href="{{ route('advertenties.upload.show') }}"><button class="button"><i class="fas fa-plus"></i>
-            {{ __('texts.upload') }}</button></a>
+        @else
+            <p class="text-center text-gray-800">{{ __('texts.no_ads_found') }}</p>
+        @endif
 
-    <a href="{{ route('advertenties.create') }}"><button class="button"><i class="fas fa-plus"></i>
-            {{ __('texts.create') }}</button></a>
+        <!-- Action Buttons, displayed based on user role -->
+        <div class="flex justify-center space-x-4 mt-4">
+            @auth
+                @if (auth()->user()->hasRole('Business'))
+                    <a href="{{ route('advertenties.upload.show') }}"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-plus"></i> {{ __('texts.upload') }}
+                    </a>
+                @endif
+
+                @if (!auth()->user()->hasRole('Standard') && Auth::check())
+                    <a href="{{ route('advertenties.create') }}"
+                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-plus"></i> {{ __('texts.create') }}
+                    </a>
+                @endif
+            @endauth
+        </div>
+    </div>
+
 
 </x-app-layout>

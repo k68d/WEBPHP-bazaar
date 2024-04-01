@@ -15,11 +15,8 @@ class AdvertisementController extends Controller
 {
     public function index(Request $request)
     {
-        // Bouw de query op basis van de filter- en sorteerinput
         $query = Advertisement::query();
-        Advertisement::factory(1)->create();
 
-        // Als er een filter voor de titel is opgegeven
         if ($request->filled('filter_titel')) {
             $query->where('titel', 'like', '%' . $request->filter_titel . '%');
         }
@@ -42,7 +39,6 @@ class AdvertisementController extends Controller
             }
         }
 
-        // Voer de query uit met paginatie
         $advertenties = $query->paginate(20)->withQueryString();
         return view('advertenties.index', compact('advertenties'));
     }
@@ -52,10 +48,8 @@ class AdvertisementController extends Controller
     {
         $advertentie = Advertisement::findOrFail($id);
 
-        // Het genereren van een QR-code voor de advertentie.
         $qrCode = QrCode::size(200)->generate(route('advertenties.show', $advertentie->id));
 
-        // Check of de advertentie al een favoriet is van de gebruiker.
         $isFavorite = false;
         if ($user = $request->user()) {
             $isFavorite = $user->favorites()->where('advertisement_id', $advertentie->id)->exists();
@@ -91,8 +85,8 @@ class AdvertisementController extends Controller
             'type' => $request->type,
             'image_path' => $path,
             'user_id' => Auth::id(),
-            'begin_huur' => $validatedData['begin_huur'] ?? null,
-            'eind_huur' => $validatedData['eind_huur'] ?? null,
+            'begin_huur' => $validatedData['begin_huur'] ?? null, //TODO
+            'eind_huur' => $validatedData['eind_huur'] ?? null, //TODO
         ]);
 
         return redirect()->route('advertenties.index')->with('success', 'Advertentie succesvol aangemaakt!');
@@ -112,29 +106,29 @@ class AdvertisementController extends Controller
     {
         $user = Auth::user();
         $rentals = Advertisement::where('user_id', $user->id)
-                                ->whereNotNull('begin_huur')
-                                ->whereNotNull('eind_huur')
-                                ->orderBy('begin_huur', 'desc')
-                                ->get();
+            ->whereNotNull('begin_huur')
+            ->whereNotNull('eind_huur')
+            ->orderBy('begin_huur', 'desc')
+            ->get();
 
-        return view('advertenties.rentaloverview', compact('rentals'));          
+        return view('advertenties.rentaloverview', compact('rentals'));
     }
 
     public function rentedOverview()
     {
         $rentals = Advertisement::where('renter_id', Auth::id())
-                            ->whereNotNull('begin_huur')
-                            ->whereNotNull('eind_huur')
-                            ->orderBy('begin_huur', 'desc')
-                            ->get();
+            ->whereNotNull('begin_huur')
+            ->whereNotNull('eind_huur')
+            ->orderBy('begin_huur', 'desc')
+            ->get();
 
         return view('advertenties.rentedOverview', compact('rentals'));
     }
 
     public function purchase($advertisementId)
     {
-        $user = Auth::user(); 
-        $advertisement = Advertisement::findOrFail($advertisementId); 
+        $user = Auth::user();
+        $advertisement = Advertisement::findOrFail($advertisementId);
 
         if ($advertisement->user_id == $user->id) {
             return back()->with('error', 'Je kunt je eigen advertenties niet kopen.');
@@ -168,8 +162,10 @@ class AdvertisementController extends Controller
         if ($advertisement->begin_huur && $advertisement->eind_huur) {
             $bestaandeBeginHuur = Carbon::parse($advertisement->begin_huur);
             $bestaandeEindHuur = Carbon::parse($advertisement->eind_huur);
-            if ($beginHuur->between($bestaandeBeginHuur, $bestaandeEindHuur) || 
-                $eindHuur->between($bestaandeBeginHuur, $bestaandeEindHuur)) {
+            if (
+                $beginHuur->between($bestaandeBeginHuur, $bestaandeEindHuur) ||
+                $eindHuur->between($bestaandeBeginHuur, $bestaandeEindHuur)
+            ) {
                 return back()->with('error', 'Deze advertentie is al gehuurd voor de opgegeven periode.');
             }
         }

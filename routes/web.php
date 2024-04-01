@@ -22,10 +22,10 @@ Route::middleware(['auth', 'verified', 'isBusiness'])->group(function () {
     Route::get('/advertenties/upload/overview', [AdvertisementController::class, 'showUploadOverview'])->name('advertenties.upload.overview');
     Route::post('/advertenties/images/upload', [AdvertisementController::class, 'uploadImages'])->name('advertenties.images.upload');
 });
-
-// Resource route voor advertenties
+Route::get('/advertenties/{advertisement}', [AdvertisementController::class, 'show'])->name('advertenties.show');
 Route::resource('advertenties', AdvertisementController::class)
     ->middleware(['auth', 'verified']);
+Route::get('/advertenties', [AdvertisementController::class, 'index'])->name('advertenties.index');
 
 Route::middleware(['auth', 'isStandard'])->group(function () {
     Route::get('/advertenties/create', [AdvertisementController::class, 'create'])->name('advertenties.create');

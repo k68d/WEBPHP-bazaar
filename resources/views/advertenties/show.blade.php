@@ -29,7 +29,7 @@
         <p>Prijs: €{{ $advertentie->price }}</p>
         <p>Type: {{ $advertentie->type }}</p>
 
-        @if (auth()->user()->id !== $advertentie->user_id)
+        @if (Auth::check() && auth()->user()->id !== $advertentie->user_id)
             @if ($advertentie->type === 'Verkoop')
                 <div>
                     @if ($advertentie->purchasers->count() > 0)
