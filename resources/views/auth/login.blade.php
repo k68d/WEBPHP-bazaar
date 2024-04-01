@@ -1,15 +1,6 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-    <div>
-        {{ __('texts.emails') }}
-        <li>admin@example.com</li>
-        <li>business@example.com</li>
-        <li>private@example.com</li>
-        <li>standard@example.com</li>
-        {{ __('texts.password') }}:
-        <li>!Ab12345</li>
-    </div>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
