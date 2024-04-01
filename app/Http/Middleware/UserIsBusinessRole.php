@@ -16,7 +16,7 @@ class UserIsBusinessRole
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check() || !Auth::user()->hasRole('Business')) {
+        if (!Auth::check() || !Auth::user()->hasRole('Admin') || !Auth::user()->hasRole('Business')) {
             // Use the abort function to return a 403 Forbidden status code
             return abort(403, 'Je hebt geen toegang tot deze pagina.');
         }

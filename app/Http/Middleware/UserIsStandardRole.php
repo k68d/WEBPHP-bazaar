@@ -17,7 +17,7 @@ class UserIsStandardRole
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check() || !(Auth::user()->hasRole('Business') || Auth::user()->hasRole('Private'))) {
+        if (!Auth::check() || !Auth::user()->hasRole('Admin') || !(Auth::user()->hasRole('Business') || Auth::user()->hasRole('Private'))) {
             return redirect('/')->with('error', 'Je hebt geen toegang tot deze pagina.');
         }
 

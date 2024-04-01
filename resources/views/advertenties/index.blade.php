@@ -1,73 +1,56 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('texts.ads') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body>
-    @include ('layouts.navbar')
+<x-app-layout>
     <h1>{{ __('texts.ads') }}</h1>
-    <div class="container mb-4">
-        <div class="row">
-            <div class="col-12">
-                <form action="{{ route('advertenties.index') }}" method="GET">
-                    <div class="form-row align-items-center">
-                        <div class="col-auto">
-                            <input type="text" class="form-control mb-2" name="filter_titel"
-                                placeholder="{{ __('texts.filter_by_title') }}" value="{{ request('filter_titel') }}">
-                        </div>
-                        <div class="col-auto">
-                            <select class="form-control mb-2" name="sorteer" style="min-width: 170px;">
-                                <option value="titel_asc" {{ request('sorteer') == 'titel_asc' ? 'selected' : '' }}>
-                                    {{ __('texts.title_asc') }}</option>
-                                <option value="titel_desc" {{ request('sorteer') == 'titel_desc' ? 'selected' : '' }}>
-                                    {{ __('texts.title_desc') }}</option>
-                                <option value="prijs_laag" {{ request('sorteer') == 'prijs_laag' ? 'selected' : '' }}>
-                                    {{ __('texts.price_low_high') }}</option>
-                                <option value="prijs_hoog" {{ request('sorteer') == 'prijs_hoog' ? 'selected' : '' }}>
-                                    {{ __('texts.price_high_low') }}</option>
-                            </select>
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary mb-2">{{ __('texts.apply') }}</button>
-                        </div>
-                    </div>
+    <div class="container mx-auto mb-4">
+        <div class="flex flex-wrap -mx-3">
+            <div class="w-full px-3">
+                <form action="{{ route('advertenties.index') }}" method="GET" class="flex items-center space-x-4">
+                    <input type="text" class="form-input px-4 py-3 rounded" name="filter_titel"
+                        placeholder="{{ __('texts.filter_by_title') }}" value="{{ request('filter_titel') }}">
+                    <select class="form-select px-4 py-3 rounded" name="sorteer" style="min-width: 170px;">
+                        <option value="titel_asc" {{ request('sorteer') == 'titel_asc' ? 'selected' : '' }}>
+                            {{ __('texts.title_asc') }}</option>
+                        <option value="titel_desc" {{ request('sorteer') == 'titel_desc' ? 'selected' : '' }}>
+                            {{ __('texts.title_desc') }}</option>
+                        <option value="prijs_laag" {{ request('sorteer') == 'prijs_laag' ? 'selected' : '' }}>
+                            {{ __('texts.price_low_high') }}</option>
+                        <option value="prijs_hoog" {{ request('sorteer') == 'prijs_hoog' ? 'selected' : '' }}>
+                            {{ __('texts.price_high_low') }}</option>
+                    </select>
+                    <button type="submit"
+                        class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        {{ __('texts.apply') }}
+                    </button>
                 </form>
             </div>
         </div>
-        <div class="container">
-            <div class="row">
+        <div class="mt-6 px-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 @forelse ($advertenties as $advertentie)
-                    <div class="col-md-4">
-                        <div class="card mb-4 shadow-sm">
-                            <div class="card-body">
-                                <img src="{{ asset('storage/' . $advertentie->afbeelding_path) }}" class="card-img-top"
-                                    alt="{{ $advertentie->titel }}"
-                                    style="height: 225px; width: 100%; display: block;">
-                                <h5 class="card-title">{{ $advertentie->title }}</h5>
-                                <p class="card-text">{{ Str::limit($advertentie->description, 100) }}</p>
-                                <p class="card-text">{{ $advertentie->type }}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <a href="{{ route('advertenties.show', $advertentie) }}"
-                                            class="btn btn-sm btn-outline-secondary">{{ __('texts.view') }}</a>
-                                        <a href="{{ route('advertenties.edit', $advertentie) }}"
-                                            class="btn btn-sm btn-outline-secondary">{{ __('texts.edit') }}</a>
-                                    </div>
-                                    <small class="text-muted">€{{ $advertentie->price }}</small>
+                    <div class="border border-gray-200 rounded-lg shadow-lg bg-white">
+                        <img src="{{ asset_or_default('storage/' . $advertentie->image_path) }}"
+                            alt="{{ __('texts.title') }}" class="object-cover w-full h-48 rounded-t-lg">
+                        <div class="p-4 bg-gray-50">
+                            <h5 class="text-lg font-bold text-gray-900">{{ $advertentie->title }}</h5>
+                            <p class="text-gray-800 mt-2">{{ Str::limit($advertentie->description, 100) }}</p>
+                            <p class="text-gray-600 mt-2">{{ $advertentie->type }}</p>
+                            <div class="flex justify-between items-center mt-4">
+                                <div>
+                                    <a href="{{ route('advertenties.show', $advertentie) }}"
+                                        class="text-blue-600 hover:text-blue-700">{{ __('texts.view') }}</a> TODO
+                                    <a href="{{ route('advertenties.edit', $advertentie) }}"
+                                        class="ml-2 text-blue-600 hover:text-blue-700">{{ __('texts.edit') }}</a> TODO
                                 </div>
+                                <span class="text-sm text-gray-900">€{{ $advertentie->price }}</span>
                             </div>
                         </div>
                     </div>
                 @empty
-                    <p>{{ __('texts.no_ads_found') }}</p>
+                    <p class="col-span-full text-gray-800">{{ __('texts.no_ads_found') }}</p>
                 @endforelse
             </div>
         </div>
+
+
     </div>
     @if ($advertenties->count())
         <div class="row">
@@ -84,6 +67,4 @@
     <a href="{{ route('advertenties.create') }}"><button class="button"><i class="fas fa-plus"></i>
             {{ __('texts.create') }}</button></a>
 
-</body>
-
-</html>
+</x-app-layout>

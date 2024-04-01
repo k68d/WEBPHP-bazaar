@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('texts.post_new_ad') }}</title>
-
-</head>
-
-<body>
+<x-app-layout>
     <form method="POST" action="{{ route('advertenties.store') }}" enctype="multipart/form-data">
         @csrf
         <div>
@@ -38,6 +28,4 @@
         </div>
         <button type="submit">{{ __('texts.place_ad') }}</button>
     </form>
-</body>
-
-</html>
+</x-app-layout>
