@@ -19,17 +19,17 @@ class AdvertisementController extends Controller
         $query = Advertisement::query();
 
         if ($request->filled('filter_titel')) {
-            $query->where('titel', 'like', '%' . $request->filter_titel . '%');
+            $query->where('title', 'like', '%' . $request->filter_titel . '%');
         }
 
         // Sorteer de resultaten
         if ($request->filled('sorteer')) {
             switch ($request->sorteer) {
                 case 'titel_asc':
-                    $query->orderBy('titel', 'asc');
+                    $query->orderBy('title', 'asc');
                     break;
                 case 'titel_desc':
-                    $query->orderBy('titel', 'desc');
+                    $query->orderBy('title', 'desc');
                     break;
                 case 'prijs_laag':
                     $query->orderBy('price', 'asc');
@@ -87,7 +87,18 @@ class AdvertisementController extends Controller
     public function create()
     {
         $otherAds = Advertisement::where('user_id', '!=', auth()->id())->get();
-        return view('advertenties.create', compact('otherAds'));
+        $verkoopCount = Advertisement::where('user_id', auth()->id())
+            ->where('type', 'Verkoop')
+            ->count();
+
+        $verhuurCount = Advertisement::where('user_id', auth()->id())
+            ->where('type', 'Verhuur')
+            ->count();
+        if (($verhuurCount + $verkoopCount) >= 8) {
+            return redirect()->back()->with('error', 'Je hebt het maximumaantal advertenties van het type gekregen');
+        }
+        return view('advertenties.create', compact('otherAds', 'verkoopCount', 'verhuurCount'));
+
     }
 
     public function store(Request $request)

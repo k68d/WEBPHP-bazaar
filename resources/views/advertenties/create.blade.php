@@ -22,8 +22,12 @@
             <select id="type" name="type" required
                 class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                 <option value="">{{ __('texts.select_type') }}</option>
-                <option value="Verkoop">{{ __('texts.sale') }}</option>
-                <option value="Verhuur">{{ __('texts.rent') }}</option>
+                @if ($verkoopCount < 4)
+                    <option value="Verkoop">{{ __('texts.sale') }}</option>
+                @endif
+                @if ($verhuurCount < 4)
+                    <option value="Verhuur">{{ __('texts.rent') }}</option>
+                @endif
             </select>
         </div>
         <div class="flex flex-col">
