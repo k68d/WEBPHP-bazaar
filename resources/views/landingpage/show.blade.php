@@ -1,10 +1,9 @@
 <x-app-layout>
-
     <div class="container mx-auto p-4">
         @if (isset($pageSetting->components['hero']))
             @php
                 $heroData = $componentsData['hero'] ?? null;
-                $heroData['template'] = 3;
+                $heroData['template'] = 2;
             @endphp
 
             {{-- Hero Template 1 --}}
@@ -68,25 +67,27 @@
 
         @if (isset($componentsData['highlighted_ads']))
             <div class="my-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <p>{{ __('texts.highlighted_ads') }}</p>
+                <div class="col-span-full">
+                    <p class="text-xl font-bold" style="color: {{ $pageSetting->palette['text'] ?? '#007bff' }}">
+                        {{ __('texts.highlighted_ads') }}</p>
+                </div>
                 @foreach ($componentsData['highlighted_ads'] as $ad)
                     <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                        @if ($ad->afbeelding_path)
-                            <img src="{{ asset_or_default('storage/' . $ad->afbeelding_path) }}" alt="Ad Image"
+                        @if ($ad->image_path)
+                            <img src="{{ asset_or_default('storage/' . $ad->image_path) }}" alt="Ad Image"
                                 class="w-full h-48 object-cover">
                         @endif
                         <div class="p-4">
                             <h3 class="text-lg font-semibold"
-                                style="color: {{ $pageSetting->palette['primary'] ?? '#007bff' }}">{{ $ad->titel }}
+                                style="color: {{ $pageSetting->palette['primary'] ?? '#007bff' }}">{{ $ad->title }}
                             </h3>
-                            <p class="text-sm text-gray-600"
-                                style="color: {{ $pageSetting->palette['text'] ?? '#000000' }}">
-                                {{ Str::limit($ad->beschrijving, 100) }}</p>
+                            <p class="text-sm" style="color: {{ $pageSetting->palette['text'] ?? '#000000' }}">
+                                {{ Str::limit($ad->description, 100) }}</p>
                             <div class="mt-3 flex justify-between items-center">
                                 <span class="font-bold"
-                                    style="color: {{ $pageSetting->palette['secondary'] ?? '#6c757d' }}">€{{ number_format($ad->prijs, 2, ',', '.') }}</span>
-                                <a href="{{ route('advertenties.show', $ad) }}" class="text-white py-2 px-4 rounded"
-                                    style="background-color: {{ $pageSetting->palette['accent'] ?? '#17a2b8' }};">
+                                    style="color: {{ $pageSetting->palette['secondary'] ?? '#6c757d' }}">€{{ number_format($ad->price, 2, ',', '.') }}</span>
+                                <a href="{{ route('advertenties.show', $ad) }}" class="py-2 px-4 rounded"
+                                    style="background-color: {{ $pageSetting->palette['accent'] ?? '#17a2b8' }}; color: {{ $pageSetting->palette['buttonText'] ?? '#ffffff' }};">
                                     {{ __('texts.more_info') }}
                                 </a>
                             </div>
@@ -95,6 +96,7 @@
                 @endforeach
             </div>
         @endif
+
 
 
     </div>

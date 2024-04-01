@@ -10,6 +10,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use League\Csv\Reader;
+use Illuminate\Support\Str;
 
 class AdvertisementController extends Controller
 {
@@ -31,10 +32,10 @@ class AdvertisementController extends Controller
                     $query->orderBy('titel', 'desc');
                     break;
                 case 'prijs_laag':
-                    $query->orderBy('prijs', 'asc');
+                    $query->orderBy('price', 'asc');
                     break;
                 case 'prijs_hoog':
-                    $query->orderBy('prijs', 'desc');
+                    $query->orderBy('price', 'desc');
                     break;
             }
         }
@@ -85,7 +86,7 @@ class AdvertisementController extends Controller
 
     public function create()
     {
-        $otherAds = Advertisement::where('user_id', '!=', auth()->id())->get(); 
+        $otherAds = Advertisement::where('user_id', '!=', auth()->id())->get();
         return view('advertenties.create', compact('otherAds'));
     }
 
@@ -233,26 +234,30 @@ class AdvertisementController extends Controller
     public function processCsvUpload(Request $request)
     {
         $request->validate([
-            'csv_file' => 'required|file|mimes:csv,txt|max:2048', // Verifieer dat het een CSV-bestand is.
+            'csv_file' => 'required|file|mimes:csv,txt|max:2048',
         ]);
 
         $path = $request->file('csv_file')->getRealPath();
         $csv = Reader::createFromPath($path, 'r');
-        $csv->setHeaderOffset(0); // Stel de eerste rij van CSV in als header.
+        $csv->setHeaderOffset(0);
 
-        $records = $csv->getRecords(); // Haal de records uit het CSV-bestand.
+        $records = $csv->getRecords();
         $advertentieIds = [];
         foreach ($records as $record) {
+            // Normaliseer de record sleutels en waarden
+            $record = $this->normalizeData($record);
+
             $validatedData = Validator::make($record, [
-                'titel' => 'required|string|max:255',
-                'beschrijving' => 'required|string',
-                'prijs' => 'required|numeric',
-                'type' => 'required|in:normaal,verhuur',
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'price' => 'required|numeric',
+                'type' => 'required|in:Verkoop,Verhuur',
             ])->validate();
+
             $advertentie = Advertisement::create([
-                'title' => $validatedData['titel'],
-                'description' => $validatedData['beschrijving'],
-                'price' => $validatedData['prijs'],
+                'title' => $validatedData['title'],
+                'description' => $validatedData['description'],
+                'price' => $validatedData['price'],
                 'type' => $validatedData['type'],
                 'user_id' => auth()->id(),
             ]);
@@ -263,6 +268,34 @@ class AdvertisementController extends Controller
         session(['uploaded_advertenties' => $advertentieIds]);
 
         return redirect()->route('advertenties.upload.overview');
+    }
+
+    protected function normalizeData($record)
+    {
+        $fieldsMapping = [
+            'titel' => 'title',
+            'beschrijving' => 'description',
+            'prijs' => 'price',
+            'type' => 'type',
+        ];
+
+        $typeValues = [
+            'sale' => 'Verkoop',
+            'rent' => 'Verhuur',
+            'verkoop' => 'Verkoop',
+            'verhuur' => 'Verhuur',
+        ];
+
+        $normalizedRecord = [];
+        foreach ($record as $key => $value) {
+            // Sleutelnaam normaliseren
+            $normalizedKey = $fieldsMapping[strtolower($key)] ?? strtolower($key);
+            // Waarde normaliseren
+            $normalizedValue = $normalizedKey === 'type' ? $typeValues[strtolower($value)] ?? $value : ucfirst(strtolower($value));
+            $normalizedRecord[$normalizedKey] = $normalizedValue;
+        }
+
+        return $normalizedRecord;
     }
 
 

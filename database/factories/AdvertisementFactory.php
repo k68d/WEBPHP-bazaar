@@ -125,9 +125,9 @@ class AdvertisementFactory extends Factory
             'title' => $this->faker->randomElement($titles),
             'description' => $this->faker->randomElement($descriptions),
             'price' => $this->faker->numberBetween(10, 1000),
-            'type' => $this->faker->randomElement(['verhuur', 'normaal']),
+            'type' => $this->faker->randomElement(['Verhuur', 'Verkoop']),
             'image_path' => $this->faker->imageUrl(640, 480, 'business', true),
-            'user_id' => User::all()->random()->id, // Consider using User::inRandomOrder()->first()->id for better performance on large datasets
+            'user_id' => User::all()->random()->id,
         ];
     }
 }
