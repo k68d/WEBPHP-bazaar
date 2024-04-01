@@ -26,7 +26,7 @@
                                 {{ $rental->eind_huur->format('d-m-Y') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 @if ($rental->return_photo_path)
-                                    <img src="{{ asset('storage/' . $rental->return_photo_path) }}"
+                                    <img src="{{ asset_or_default('storage/' . $rental->return_photo_path) }}"
                                         alt="{{ __('texts.return_photo') }}" class="w-20 h-20 object-cover rounded-md">
                                 @else
                                     {{ __('texts.no_photo') }}

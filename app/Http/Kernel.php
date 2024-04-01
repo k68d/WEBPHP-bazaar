@@ -38,7 +38,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             'setLanguage',
         ],
-    
+
         'api' => [
             \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
@@ -47,7 +47,7 @@ class Kernel extends HttpKernel
 
         ],
     ];
-    
+
 
     /**
      * The application's middleware aliases.
@@ -71,7 +71,7 @@ class Kernel extends HttpKernel
         'isBusiness' => \App\Http\Middleware\UserIsBusinessRole::class,
         'setLanguage' => \App\Http\Middleware\SetLanguage::class,
         'isAdmin' => \App\Http\Middleware\UserIsAdminRole::class,
-        'isStandard' => \App\Http\Middleware\UserIsStandardRole::class,
+        'isNotStandard' => \App\Http\Middleware\UserIsNotStandardRole::class,
     ];
-    
+
 }

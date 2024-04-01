@@ -22,14 +22,17 @@ Route::middleware(['auth', 'verified', 'isBusiness'])->group(function () {
     Route::get('/advertenties/upload/overview', [AdvertisementController::class, 'showUploadOverview'])->name('advertenties.upload.overview');
     Route::post('/advertenties/images/upload', [AdvertisementController::class, 'uploadImages'])->name('advertenties.images.upload');
 });
+
+Route::get('/advertenties/create', [AdvertisementController::class, 'create'])->middleware(['auth', 'isNotStandard'])->name('advertenties.create');
 Route::get('/advertenties/{advertisement}', [AdvertisementController::class, 'show'])->name('advertenties.show');
+
 Route::resource('advertenties', AdvertisementController::class)
     ->middleware(['auth', 'verified']);
 Route::get('/advertenties', [AdvertisementController::class, 'index'])->name('advertenties.index');
+Route::get('/advertenties/create', [AdvertisementController::class, 'create'])->middleware(['auth', 'isNotStandard'])->name('advertenties.create');
 
-Route::middleware(['auth', 'isStandard'])->group(function () {
-    Route::get('/advertenties/create', [AdvertisementController::class, 'create'])->name('advertenties.create');
-});
+
+
 Route::post('/advertenties/{advertisement}/purchase', [AdvertisementController::class, 'purchase'])->name('advertisement.purchase');
 Route::post('/advertisement/{advertisement}/rent', [AdvertisementController::class, 'rent'])->middleware('auth')->name('advertisement.rent');
 Route::get('/advertentie', [AdvertisementController::class, 'index'])->name('advertisements.index');

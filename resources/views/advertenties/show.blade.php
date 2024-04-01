@@ -22,7 +22,7 @@
     <div class="container mx-auto px-4">
         <h1 class="text-2xl font-bold mt-5">{{ $advertentie->title }}</h1>
         @if ($advertentie->image_path)
-            <img src="{{ asset('storage/' . $advertentie->image_path) }}" alt="{{ $advertentie->title }}"
+            <img src="{{ asset_or_default('storage/' . $advertentie->image_path) }}" alt="{{ $advertentie->title }}"
                 class="max-w-full h-auto mt-4 rounded">
         @endif
         <p class="mt-4">Beschrijving: {{ $advertentie->description }}</p>

@@ -85,8 +85,8 @@ class AdvertisementController extends Controller
             'type' => $request->type,
             'image_path' => $path,
             'user_id' => Auth::id(),
-            'begin_huur' => $validatedData['begin_huur'] ?? null, //TODO
-            'eind_huur' => $validatedData['eind_huur'] ?? null, //TODO
+            'begin_huur' => null,
+            'eind_huur' => null,
         ]);
 
         return redirect()->route('advertenties.index')->with('success', 'Advertentie succesvol aangemaakt!');

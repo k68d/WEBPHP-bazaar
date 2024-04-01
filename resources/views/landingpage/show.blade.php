@@ -72,7 +72,7 @@
                 @foreach ($componentsData['highlighted_ads'] as $ad)
                     <div class="bg-white shadow-md rounded-lg overflow-hidden">
                         @if ($ad->afbeelding_path)
-                            <img src="{{ asset('storage/' . $ad->afbeelding_path) }}" alt="Ad Image"
+                            <img src="{{ asset_or_default('storage/' . $ad->afbeelding_path) }}" alt="Ad Image"
                                 class="w-full h-48 object-cover">
                         @endif
                         <div class="p-4">

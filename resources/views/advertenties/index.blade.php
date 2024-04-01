@@ -52,18 +52,15 @@
 
 
     </div>
-    <!-- Container to Match Main Content Area -->
     <div class="container mx-auto mb-4 px-4">
-        <!-- Pagination, conditionally displayed -->
         @if ($advertenties->count())
             <div class="flex justify-center mt-4">
-                {{ $advertenties->links() }} <!-- Tailwind-styled pagination -->
+                {{ $advertenties->links() }}
             </div>
         @else
             <p class="text-center text-gray-800">{{ __('texts.no_ads_found') }}</p>
         @endif
 
-        <!-- Action Buttons, displayed based on user role -->
         <div class="flex justify-center space-x-4 mt-4">
             @auth
                 @if (auth()->user()->hasRole('Business'))
