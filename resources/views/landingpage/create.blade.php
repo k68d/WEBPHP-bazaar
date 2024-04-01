@@ -22,7 +22,7 @@
                             <!-- Background Color -->
                             <div class="px-2 w-1/2 md:w-1/4">
                                 <label for="palette_background"
-                                    class="block text-xs font-bold mb-1">{{ __('texts.background') }}</label>
+                                    class="block text-xs font-bold mb-1 text-white">{{ __('texts.background') }}</label>
                                 <input type="color" name="palette[background]" id="palette_background"
                                     value="{{ old('palette.background', '#ffffff') }}" class="mb-2 w-full">
                                 <span id="background_swatch" class="inline-block w-6 h-6 border"
@@ -35,7 +35,7 @@
                             <!-- Text Color -->
                             <div class="px-2 w-1/2 md:w-1/4">
                                 <label for="palette_text"
-                                    class="block text-xs font-bold mb-1">{{ __('texts.text') }}</label>
+                                    class="block text-xs font-bold mb-1 text-white">{{ __('texts.text') }}</label>
                                 <input type="color" name="palette[text]" id="palette_text"
                                     value="{{ old('palette.text', '#000000') }}" class="mb-2 w-full">
                                 <span id="text_swatch" class="inline-block w-6 h-6 border"
@@ -48,7 +48,7 @@
                             <!-- Primary Color -->
                             <div class="px-2 w-1/2 md:w-1/4">
                                 <label for="palette_primary"
-                                    class="block text-xs font-bold mb-1">{{ __('texts.primary') }}</label>
+                                    class="block text-xs font-bold mb-1 text-white">{{ __('texts.primary') }}</label>
                                 <input type="color" name="palette[primary]" id="palette_primary"
                                     value="{{ old('palette.primary', '#007bff') }}" class="mb-2 w-full">
                                 <span id="primary_swatch" class="inline-block w-6 h-6 border"
@@ -61,7 +61,7 @@
                             <!-- Secondary Color -->
                             <div class="px-2 w-1/2 md:w-1/4">
                                 <label for="palette_secondary"
-                                    class="block text-xs font-bold mb-1">{{ __('texts.secondary') }}</label>
+                                    class="block text-xs font-bold mb-1 text-white">{{ __('texts.secondary') }}</label>
                                 <input type="color" name="palette[secondary]" id="palette_secondary"
                                     value="{{ old('palette.secondary', '#6c757d') }}" class="mb-2 w-full">
                                 <span id="secondary_swatch" class="inline-block w-6 h-6 border"
@@ -74,7 +74,7 @@
                             <!-- Accent Color -->
                             <div class="px-2 w-1/2 md:w-1/4">
                                 <label for="palette_accent"
-                                    class="block text-xs font-bold mb-1">{{ __('texts.accent') }}</label>
+                                    class="block text-xs font-bold mb-1 text-white">{{ __('texts.accent') }}</label>
                                 <input type="color" name="palette[accent]" id="palette_accent"
                                     value="{{ old('palette.accent', '#17a2b8') }}" class="mb-2 w-full">
                                 <span id="accent_swatch" class="inline-block w-6 h-6 border"
@@ -89,7 +89,7 @@
                     <!-- Text Style Fields -->
                     <div class="mb-4">
                         <label for="text_style_font"
-                            class="block text-white text-sm font-bold mb-2">{{ __('texts.lettertype') }}</label>
+                            class="block text-sm font-bold mb-2 text-white">{{ __('texts.lettertype') }}</label>
                         <input type="text" name="text_style[font]" id="text_style_font"
                             placeholder="{{ __('texts.lettertype') }}"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
