@@ -2,7 +2,7 @@
 
 return [
     'welcome' => 'Welcome to the Bazaar shop. Here you can find all the products you need. See the latest advertisements below.',
-    
+
     'create_new_contract' => 'Create a new contract',
     'user_1' => 'User 1',
     'user_2' => 'User 2',
@@ -195,5 +195,18 @@ return [
     'add_to_favorites' => 'Add to Favorites',
     'highlight_ad' => 'Highlight Ad',
     'rental' => 'Rental',
+    'max_type_ads_received' => 'You have received the maximum number of ads of the type.',
+    'cannot_buy_own_ads' => 'You cannot buy your own ads',
+    'ad_already_sold' => 'This ad has already been sold.',
+    'ad_not_rentable' => 'This ad cannot be rented.',
+    'max_items_rented' => 'You have already rented the maximum number of 4 items.',
+    'ad_already_rented_for_period' => 'This ad has already been rented for the specified period.',
+    'only_return_own_ads' => 'You can only return your own ads.',
+    'cannot_upload_more_than_four_ads' => 'You cannot upload more than 4 ads.',
+    'no_permission_to_download_contract' => 'You do not have permission to download this contract.',
+    'unauthorized_action' => 'Unauthorized action.',
+    'reviews_only_for_rental_ads' => 'Reviews can only be posted for rental ads.',
+    'business_account_required' => 'You need a business account to view that page.',
+    'no_access_to_page' => 'You do not have access to this page.',
 
 ];

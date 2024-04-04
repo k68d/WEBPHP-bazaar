@@ -194,5 +194,18 @@ return [
     'add_to_favorites' => 'Toevoegen aan Favorieten',
     'highlight_ad' => 'Licht advertensie aan',
     'rental' => 'Verhuur',
+    'texts.cannot_buy_own_ads' => 'Je kunt je eigen advertenties niet kopen.',
+    'max_type_ads_received' => 'Je hebt het maximumaantal advertenties van het type gekregen',
+    'ad_already_sold' => 'Deze advertentie is al verkocht.',
+    'ad_not_rentable' => 'Deze advertentie kan niet gehuurd worden.',
+    'max_items_rented' => 'Je hebt al het maximum aantal van 4 artikelen gehuurd.',
+    'ad_already_rented_for_period' => 'Deze advertentie is al gehuurd voor de opgegeven periode.',
+    'only_return_own_ads' => 'Je kunt alleen je eigen advertenties retourneren.',
+    'cannot_upload_more_than_four_ads' => 'Je kan niet meer dan 4 advertenties uploaden',
+    'no_permission_to_download_contract' => 'Je hebt geen toestemming om dit contract te downloaden.',
+    'unauthorized_action' => 'Niet geautoriseerde actie.',
+    'reviews_only_for_rental_ads' => 'Reviews kunnen alleen geplaatst worden voor verhuuradvertenties.',
+    'business_account_required' => 'Je moet een zakelijk account hebben om die pagina te bekijken.',
+    'no_access_to_page' => 'Je hebt geen toegang tot deze pagina.',
 
 ];

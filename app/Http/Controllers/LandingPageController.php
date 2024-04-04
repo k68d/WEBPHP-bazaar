@@ -100,7 +100,7 @@ class LandingPageController extends Controller
         $pageSetting = PageSetting::findOrFail($id);
 
         if ($pageSetting->user_id != Auth::id()) {
-            return redirect()->back()->with('error', 'Unauthorized action.');
+            return redirect()->back()->withErrors(['error' => __('texts.unauthorized_action')]);
         }
 
         $rules = [
@@ -141,7 +141,7 @@ class LandingPageController extends Controller
             $highlightedAds = Auth::user()->highlightedAds()->get();
             return $highlightedAds;
         }
-    
+
         return collect();
     }
 

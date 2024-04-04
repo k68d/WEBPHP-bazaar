@@ -62,7 +62,7 @@ class ContractController extends Controller
         // Controleer of de ingelogde gebruiker een admin is of deel uitmaakt van het contract
         $user = Auth::user();
         if (!$user->hasRole('Admin') && $user->id !== $contract->user_id_one && $user->id !== $contract->user_id_two) {
-            return redirect()->back()->with('error', 'Je hebt geen toestemming om dit contract te downloaden.');
+            return redirect()->back()->withErrors(['error' => __('texts.no_permission_to_download_contract')]);
         }
 
         // Aannemende dat $contractDate een datumstring is, bijvoorbeeld "2024-03-20"

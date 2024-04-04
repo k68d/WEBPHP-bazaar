@@ -1,4 +1,13 @@
 <x-app-layout>
+    @if ($errors->any())
+        <div class="mb-5 p-4 bg-red-100 text-red-600 border border-red-400 rounded">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Advertisement Overview') }}
@@ -13,7 +22,8 @@
                         </p>
                     </div>
 
-                    <form action="{{ route('advertenties.images.upload') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('advertenties.images.upload') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @foreach ($advertenties as $advertentie)
                             <div class="mb-4">

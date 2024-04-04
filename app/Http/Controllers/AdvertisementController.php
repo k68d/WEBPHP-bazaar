@@ -95,7 +95,7 @@ class AdvertisementController extends Controller
             ->where('type', 'Verhuur')
             ->count();
         if (($verhuurCount + $verkoopCount) >= 8) {
-            return redirect()->back()->with('error', 'Je hebt het maximumaantal advertenties van het type gekregen');
+            return redirect()->back()->withErrors(['error' => __('texts.max_type_ads_received')]);
         }
         return view('advertenties.create', compact('otherAds', 'verkoopCount', 'verhuurCount'));
 
@@ -159,11 +159,11 @@ class AdvertisementController extends Controller
         $advertisement = Advertisement::findOrFail($advertisementId);
 
         if ($advertisement->user_id == $user->id) {
-            return back()->with('error', 'Je kunt je eigen advertenties niet kopen.');
+            return back()->withErrors(['error' => __('texts.cannot_buy_own_ads')]);
         }
 
         if ($advertisement->purchasers->count() > 0) {
-            return back()->with('error', 'Deze advertentie is al verkocht.');
+            return back()->withErrors(['error' => __('texts.ad_already_sold')]);
         }
 
         $user->purchasedAdvertisements()->attach($advertisement);
@@ -176,12 +176,12 @@ class AdvertisementController extends Controller
         $user = $advertisement->user;
 
         if ($advertisement->type !== 'Verhuur') {
-            return back()->with('error', 'Deze advertentie kan niet gehuurd worden.');
+            return back()->withErrors(['error' => __('texts.ad_not_rentable')]);
         }
 
         $currentRentals = $user->rentedAdvertisements()->count();
         if ($currentRentals >= 4) {
-            return back()->with('error', 'Je hebt al het maximum aantal van 4 artikelen gehuurd.');
+            return back()->withErrors(['error' => __('texts.max_items_rented')]);
         }
 
         $request->validate([
@@ -199,7 +199,7 @@ class AdvertisementController extends Controller
                 $beginHuur->between($bestaandeBeginHuur, $bestaandeEindHuur) ||
                 $eindHuur->between($bestaandeBeginHuur, $bestaandeEindHuur)
             ) {
-                return back()->with('error', 'Deze advertentie is al gehuurd voor de opgegeven periode.');
+                return back()->withErrors(['error' => __('texts.ad_already_rented_for_period')]);
             }
         }
 
@@ -226,7 +226,7 @@ class AdvertisementController extends Controller
         $advertisement = Advertisement::findOrFail($advertisementId);
 
         if ($advertisement->renter_id !== $user->id) {
-            return back()->with('error', 'Je kunt alleen je eigen advertenties retourneren.');
+            return back()->withErrors(['error' => __('texts.only_return_own_ads')]);
         }
 
         $path = $request->file('return_photo')->store('afbeeldingen', 'public');
@@ -258,6 +258,10 @@ class AdvertisementController extends Controller
         $csv->setHeaderOffset(0);
 
         $records = $csv->getRecords();
+
+        if (iterator_count($records) > 4) {
+            return redirect()->back()->withErrors(['error' => __('texts.cannot_upload_more_than_four_ads')]);
+        }
         $advertentieIds = [];
         foreach ($records as $record) {
             // Normaliseer de record sleutels en waarden

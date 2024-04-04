@@ -19,7 +19,7 @@ class UserIsAdminRole
     {
         if (!Auth::user()->hasRole(['Admin'])) {
             // Omleiden naar een andere pagina als de gebruiker niet de rol 'Business' heeft
-            return redirect('/')->with('error', 'Je moet een zakelijk account hebben om die pagina te bekijken.');
+            return redirect('/')->withErrors(['error' => __('texts.business_account_required')]);
         }
 
         return $next($request);

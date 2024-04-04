@@ -1,4 +1,13 @@
 <x-app-layout>
+    @if ($errors->any())
+        <div class="mb-5 p-4 bg-red-100 text-red-600 border border-red-400 rounded">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <h1 class="text-3xl font-bold text-center text-white mt-6 mb-4">{{ __('texts.ads') }}</h1>
     <div class="container mx-auto mb-4">
         <div class="flex flex-wrap -mx-3">
@@ -37,7 +46,7 @@
                                 <div>
                                     <a href="{{ route('advertenties.show', $advertentie) }}"
                                         class="text-blue-600 hover:text-blue-700">{{ __('texts.view') }}</a>
-                                    @if (auth()->user()->id === $advertentie->user_id)
+                                    @if (auth()->check() && auth()->user()->id === $advertentie->user_id)
                                         <a href="{{ route('advertenties.edit', $advertentie) }}"
                                             class="ml-2 text-blue-600 hover:text-blue-700">{{ __('texts.edit') }}</a>
                                     @endif

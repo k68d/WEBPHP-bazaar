@@ -22,6 +22,6 @@ class UserIsNotStandardRole
 
         }
 
-        return redirect('/')->with('error', 'Je hebt geen toegang tot deze pagina.');
+        return redirect('/')->withErrors(['error' => __('texts.no_access_to_page')]);
     }
 }

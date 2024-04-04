@@ -19,7 +19,7 @@ class ProductReviewController extends Controller
         $advertisement = Advertisement::findOrFail($advertisementId);
         // Optionele check: zorg ervoor dat de advertentie van het type 'Verhuur' is
         if ($advertisement->type !== 'Verhuur') {
-            return back()->with('error', 'Reviews kunnen alleen geplaatst worden voor verhuuradvertenties.');
+            return back()->withErrors(['error' => __('texts.reviews_only_for_rental_ads')]);
         }
 
         ProductReview::create([

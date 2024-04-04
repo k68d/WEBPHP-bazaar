@@ -1,4 +1,13 @@
 <x-app-layout>
+    @if ($errors->any())
+        <div class="mb-5 p-4 bg-red-100 text-red-600 border border-red-400 rounded">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="max-w-6xl mx-auto sm:px-6 lg:px-8 py-12">
         @if ($rentals->isEmpty())
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
